@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     fetchAuthors();
     fetchBooks();
-      fetchAllBooksFromAuthor();
+    fetchAllBooksFromAuthor();
   }, []);
 
   const fetchAuthors = async () => {
@@ -32,7 +32,7 @@ function App() {
       console.error('Error fetching books:', error);
     }
   };
-  const fetchAllBooksFromAuthor = async (authorId) => { // Denne funksjonen må løses slik at jeg ikke authorId er undefiened første gang den kjøres.
+  const fetchAllBooksFromAuthor = async (authorId) => { // Denne funksjonen må løses slik at ikke authorId er undefiened første gang den kjøres.
     try {
       const response = await axios.get(`http://localhost:2222/books/${authorId}`);
       setAllBooksFromAuthor(response.data);
@@ -46,14 +46,24 @@ function App() {
     return author ? author.author_name : 'Unknown Author';
   };
 
+  const changeIsRead = async (bookId) => {
+    try {
+      console.log(bookId)
+      await axios.patch(`http://localhost:2222/booksread/${bookId}`);
+      fetchBooks();
+    } catch (error) {
+      console.error('Error fetching books:', error);
+    }
+  };
+
   return (
     <div>
 
       <AuthorsList authors={authors} fetchAllBooksFromAuthor={fetchAllBooksFromAuthor} />
       
-      <BooksList books={books} getAuthorNameById={getAuthorNameById} />
+      <BooksList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
 
-      <BooksFromAuthorList booksFromAuthor={booksFromAuthor} getAuthorNameById={getAuthorNameById} />
+      <BooksFromAuthorList booksFromAuthor={booksFromAuthor} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
       
     </div>
   );

@@ -39,9 +39,36 @@ function getAllBooksFromAuthor(authorId) {
     });
 }
 
+function changeIsRead(bookId, change){
+    return new Promise((resolve, reject) => {
+        const query =`UPDATE dbo.Books SET is_read = ${change} WHERE book_id=${bookId}`;
+        sql.query(connectionString, query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+// function addBurthYearToAuthor(authorId, birthYear){
+//     return new Promise((resolve, reject) => {
+//         const query = `UPDATE dbo.Authors SET birth_year = ${birthYear} WHERE author_id=${authorId}`;
+//         sql.query(connectionString, query, (err, rows) => {
+//             if(err){
+//                 reject(err);
+//             } else {
+//                 resolve(rows);
+//             }
+//         });
+//     })
+// }
+
 module.exports = {
     getAuthors: getAuthors,
     getBooks: getBooks,
     getAllBooksFromAuthor: getAllBooksFromAuthor,
+    changeIsRead: changeIsRead,
 };
 

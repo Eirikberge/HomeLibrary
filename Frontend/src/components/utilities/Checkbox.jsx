@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function Checkbox({ label, isRead }) {
-  const [isChecked, setChecked] = useState(false);
-
+function Checkbox({ label, isRead, onChange }) {
   const handleCheckboxChange = () => {
-    setChecked(!isChecked);
+    onChange(!isRead);
   };
 
   return (
@@ -12,7 +10,7 @@ function Checkbox({ label, isRead }) {
       <label>
         <input
           type="checkbox"
-          checked={isRead ? !isChecked : isChecked}
+          checked={isRead}
           onChange={handleCheckboxChange}
         />
         {label}

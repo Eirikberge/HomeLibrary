@@ -2,7 +2,10 @@ import React from 'react';
 import Checkbox from '../utilities/Checkbox';
 
 
-const BooksList = ({ books, getAuthorNameById }) => {
+const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
+  const handleCheckboxChange = (bookId) => {
+    changeIsRead(bookId);
+  };
   return (
     <div>
       <h1>Books List:</h1>
@@ -10,7 +13,15 @@ const BooksList = ({ books, getAuthorNameById }) => {
         <ul>
           {books.map((book) => (
             <li key={book.book_id}>
-              <p>Tittel: {book.book_name} ||  Forfatter: {getAuthorNameById(book.author_id)} <Checkbox label={book.is_read ? "Lest" : "Ikke lest"} isRead = {book.is_read}/></p></li>
+              <p>
+                Tittel: {book.book_name} || Forfatter: {getAuthorNameById(book.author_id)}{' '}
+                <Checkbox
+                  label={book.is_read ? 'Lest' : 'Ikke lest'}
+                  isRead={book.is_read}
+                  onChange={() => handleCheckboxChange(book.book_id)}
+                />
+              </p>
+            </li>
           ))}
         </ul>
       ) : (
