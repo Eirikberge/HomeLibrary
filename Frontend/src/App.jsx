@@ -23,7 +23,6 @@ function App() {
       console.error('Error fetching authors:', error);
     }
   };
-
   const fetchBooks = async () => {
     try {
       const response = await axios.get('http://localhost:2222/books');
@@ -34,6 +33,7 @@ function App() {
   };
   const fetchAllBooksFromAuthor = async (authorId) => { // Denne funksjonen må løses slik at ikke authorId er undefiened første gang den kjøres.
     try {
+      if (authorId == null) authorId = 1;
       const response = await axios.get(`http://localhost:2222/books/${authorId}`);
       setAllBooksFromAuthor(response.data);
     } catch (error) {
@@ -46,10 +46,10 @@ function App() {
     return author ? author.author_name : 'Unknown Author';
   };
 
-  const changeIsRead = async (bookId) => {
+  const changeIsRead = async (bookId, isRead) => {
     try {
-      console.log(bookId)
-      await axios.patch(`http://localhost:2222/booksread/${bookId}`);
+      const change = isRead ? 0 : 1;
+      await axios.patch(`http://localhost:2222/bookisread/${bookId}/${change}`);
       fetchBooks();
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -63,7 +63,7 @@ function App() {
       
       <BooksList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
 
-      <BooksFromAuthorList booksFromAuthor={booksFromAuthor} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
+      <BooksFromAuthorList booksFromAuthor={booksFromAuthor} getAuthorNameById={getAuthorNameById}/>
       
     </div>
   );
