@@ -31,7 +31,7 @@ function App() {
       console.error('Error fetching books:', error);
     }
   };
-  const fetchAllBooksFromAuthor = async (authorId) => { // Denne funksjonen må løses slik at ikke authorId er undefiened første gang den kjøres.
+  const fetchAllBooksFromAuthor = async (authorId) => {
     try {
       if (authorId == null) authorId = 1;
       const response = await axios.get(`http://localhost:2222/books/${authorId}`);

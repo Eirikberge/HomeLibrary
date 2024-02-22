@@ -10,7 +10,6 @@ app.get("/authors", async (req, res) => {
     res.send(info);
 });
 app.get("/books", async (req, res) => {
-
     const booksInfo = await db.getBooks();
     res.send(booksInfo);
 });
