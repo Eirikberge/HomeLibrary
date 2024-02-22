@@ -4,6 +4,7 @@ const app = express();
 const db = require('./dbservice');
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/authors", async (req, res) => { 
     const info = await db.getAuthors();
@@ -22,6 +23,14 @@ app.patch("/bookisread/:bookId/:change", async (req, res) => {
     const bookId = req.params.bookId;
     const change = req.params.change;
     const info = await db.changeIsRead(bookId, change);
+    res.send(info);
+});
+app.patch("/summary/:bookId/", async (req, res) => {
+    const bookId = req.params.bookId;
+    const body = (req.body);
+    console.log(body)
+    const text = body.text;
+    const info = await db.addSummary(bookId, text);
     res.send(info);
 });
 

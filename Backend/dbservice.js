@@ -3,7 +3,7 @@ const connectionString = "Server=DESKTOP-D6K8JFR\\SQLEXPRESS;Database=HomeLibrar
 
 function getAuthors() {
     return new Promise((resolve, reject) => {
-        const query = "SELECT * FROM dbo.Authors"; // denne til a spesifisere alle kolonner
+        const query = "SELECT author_id, author_name, birth_year FROM dbo.Authors";
         sql.query(connectionString, query, (err, rows) => {
             if (err) {
                 reject(err);
@@ -15,7 +15,7 @@ function getAuthors() {
 }
 function getBooks() {
     return new Promise((resolve, reject) => {
-        const query = "SELECT * FROM dbo.Books";
+        const query = "SELECT book_id, book_name, author_id, book_summary, is_read FROM dbo.Books";
         sql.query(connectionString, query, (err, rows) => {
             if (err) {
                 reject(err);
@@ -25,7 +25,6 @@ function getBooks() {
         });
     });
 }
-// sette sammen, enten authorId eller alle
 function getAllBooksFromAuthor(authorId) {
     return new Promise((resolve, reject) => {
         const query = `SELECT * FROM dbo.Books WHERE author_id=${authorId}`;
@@ -51,11 +50,24 @@ function changeIsRead(bookId, change){
         });
     });
 }
+function addSummary(bookId, text){
+    return new Promise((resolve, reject) => {
+        const query =`UPDATE dbo.Books SET book_summary = '${text}' WHERE book_id=${bookId}`;
+        sql.query(connectionString, query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 
 module.exports = {
     getAuthors: getAuthors,
     getBooks: getBooks,
     getAllBooksFromAuthor: getAllBooksFromAuthor,
     changeIsRead: changeIsRead,
+    addSummary: addSummary,
 };
 

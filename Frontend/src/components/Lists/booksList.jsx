@@ -1,8 +1,11 @@
 import React from 'react';
 
-const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
+const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummaryTextbox }) => {
   const handleCheckboxChange = (bookId, change) => {
     changeIsRead(bookId, change);
+  };
+  const getTextbox = (bookId) => {
+    addSummaryTextbox(bookId);
   };
 
   return (
@@ -20,8 +23,9 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
                     checked={book.is_read}
                     onChange={() => handleCheckboxChange(book.book_id, book.is_read)}
                   />
-                  {book.is_read ? 'Lest' : 'Ikke lest'}
+                  {book.is_read ? 'Lest ' : 'Ikke lest '}
                 </label>
+                <button onClick={() => getTextbox(book.book_id)}>Legg til oppsumering</button>
               </p>
             </li>
           ))}
