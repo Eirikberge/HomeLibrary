@@ -27,9 +27,7 @@ app.patch("/bookisread/:bookId/:change", async (req, res) => {
 });
 app.patch("/summary/:bookId/", async (req, res) => {
     const bookId = req.params.bookId;
-    const body = (req.body);
-    console.log(body)
-    const text = body.text;
+    const text = req.body.text;
     const info = await db.addSummary(bookId, text);
     res.send(info);
 });
