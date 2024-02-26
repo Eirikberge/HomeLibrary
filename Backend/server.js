@@ -31,6 +31,12 @@ app.patch("/summary/:bookId/", async (req, res) => {
     const info = await db.addSummary(bookId, text);
     res.send(info);
 });
+app.post("/addbooktodb/:selectedAuthor/", async (req, res) => {
+    const selectedAuthor = req.params.selectedAuthor;
+    const bookTitle = req.body.bookTitle;
+    const info = await db.addBook(selectedAuthor, bookTitle);
+    res.send(info);
+})
 
 // post, get, patch, delete, put
 // lese på new Promise og async/awaits

@@ -17,7 +17,7 @@ const BooksListTEST = ({
   const getSummaryTextbox = (bookId, summaryText) => {
     setShowSummaryTextbox(true);
     setSelectedBookId(bookId);
-    setInputText(summaryText)
+    setInputText(summaryText);
   };
 
   const save = () => {
@@ -50,7 +50,11 @@ const BooksListTEST = ({
                 />
                 {book.is_read ? "Lest " : "Ikke lest "}
               </label>
-              <button onClick={() => getSummaryTextbox(book.book_id, book.book_summary)}>
+              <button
+                onClick={() =>
+                  getSummaryTextbox(book.book_id, book.book_summary)
+                }
+              >
                 Legg til oppsumering
               </button>
             </p>
@@ -67,8 +71,8 @@ const BooksListTEST = ({
             rows={3}
             cols={50}
           />
-          <button onClick={save}>Lagre</button>
-          <button onClick={remove}>Avbryt</button>
+          <button onClick={() => save()}>Lagre</button>
+          <button onClick={() => remove()}>Avbryt</button>
         </div>
       )}
     </div>

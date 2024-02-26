@@ -9,7 +9,7 @@ export default function Navbar() {
       <ul>
         <CustomLink to="library">Bibliotek</CustomLink>
         <CustomLink to="alt">Alt</CustomLink>
-        <CustomLink to="myPage">Min side</CustomLink>
+        <CustomLink to="myPage">Legg til Bok</CustomLink>
       </ul>
     </nav>
   );

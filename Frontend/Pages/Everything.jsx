@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AuthorsListTEST from "../src/components/TESTauthorList";
-import BooksListTEST from "../src/components/TESTbooksList";
-import BooksFromAuthorListTEST from "../src/components/TESTbooksFromAuthorList";
+import AuthorsListTEST from "../src/components/TestLists/TESTauthorList";
+import BooksListTEST from "../src/components/TestLists/TESTbooksList";
 
 function Everything() {
-
   const [authors, setAuthors] = useState([]);
   const [books, setBooks] = useState([]);
   const [booksFromAuthor, setAllBooksFromAuthor] = useState([]);
@@ -72,6 +70,8 @@ function Everything() {
       <AuthorsListTEST
         authors={authors}
         fetchAllBooksFromAuthor={fetchAllBooksFromAuthor}
+        booksFromAuthor={booksFromAuthor}
+        getAuthorNameById={getAuthorNameById}
       />
 
       <BooksListTEST
@@ -79,11 +79,6 @@ function Everything() {
         getAuthorNameById={getAuthorNameById}
         changeIsRead={changeIsRead}
         addSummaryToDatabase={addSummaryToDatabase}
-      />
-
-      <BooksFromAuthorListTEST
-        booksFromAuthor={booksFromAuthor}
-        getAuthorNameById={getAuthorNameById}
       />
     </div>
   );
