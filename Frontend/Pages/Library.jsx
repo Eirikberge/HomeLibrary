@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import BookList from "../src/components/booksList";
 
@@ -14,7 +14,7 @@ function Library() {
     fetchBooks();
     fetchAuthors();
   };
-
+//#region API-calls
   const fetchBooks = async () => {
     try {
       const response = await axios.get("http://localhost:2222/books");
@@ -38,6 +38,16 @@ function Library() {
     return author ? author.author_name : "Unknown Author";
   };
 
+  const changeIsRead = async (bookId, isRead) => {
+    try {
+      const change = isRead ? 0 : 1;
+      await axios.patch(`http://localhost:2222/bookisread/${bookId}/${change}`);
+      fetchBooks();
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
+//#endregion
   return (
     <div>
       {showStartInterface && (
@@ -51,7 +61,7 @@ function Library() {
       )}
 
       {showBookList && (
-        <BookList books={books} getAuthorNameById={getAuthorNameById} />
+        <BookList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
       )}
     </div>
   );

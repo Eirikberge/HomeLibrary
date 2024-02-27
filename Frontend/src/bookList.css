@@ -33,6 +33,20 @@
     border  : solid;
   }
 
+  /*OversikftInfoboks*/
+  .infoHeadline{
+    text-align: center;
+  }
+
+  /*Oppsumeringsfelt*/
+  .summaryBox{
+    background-color: #eee;
+    height: 100px;
+    width: 400px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+
   /*Søkebar*/
   .Searchbar {
     background-color: #eee;

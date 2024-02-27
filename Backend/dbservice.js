@@ -28,7 +28,7 @@ function getBooks() {
     });
   });
 }
-function getAllBooksFromAuthor(authorId) {
+function getAllBooksFromAuthor(authorId="") {
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM dbo.Books WHERE author_id=${authorId}`;
     sql.query(connectionString, query, (err, rows) => {
