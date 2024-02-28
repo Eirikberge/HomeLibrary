@@ -45,36 +45,39 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
 
   return (
     <div>
+      <ul className="listContainer">
+        <h1>Bokhylle</h1>
         <div className="search-bar-container">
           <SearchBar setSearchResults={setSearchResults} />
           <div>
-            {searchResults.map((result, id) => {
-              // return <div key={id}>{result.book_name}</div>;
-            })}
+            {books
+              .filter(
+                (book) =>
+                  searchResults.length === 0 ||
+                  searchResults.some(
+                    (result) => result.book_name === book.book_name
+                  )
+              )
+              .sort((a, b) => a.book_name.localeCompare(b.book_name))
+              .map((book) => (
+                <li key={book.book_id} className="listItem">
+                  <div className="firstLine">Tittel: {book.book_name}</div>
+                  <div className="secondLine">
+                    Forfatter: {getAuthorNameById(book.author_id)}{" "}
+                  </div>
+                  <div className="thirdLine">
+                    {book.is_read ? "Lest✔" : "Ikke lest"}
+                    <button
+                      className="seeMorebtn"
+                      onClick={() => moreInfo(book, book.book_summary)}
+                    >
+                      Se mer
+                    </button>
+                  </div>
+                </li>
+              ))}
+          </div>
         </div>
-      </div>
-
-      <ul className="listContainer">
-        <h1>Bokhylle</h1>
-        {books
-          .sort((a, b) => a.book_name.localeCompare(b.book_name))
-          .map((book) => (
-            <li key={book.book_id} className="listItem">
-              <div className="firstLine">Tittel: {book.book_name}</div>
-              <div className="secondLine">
-                Forfatter: {getAuthorNameById(book.author_id)}{" "}
-              </div>
-              <div className="thirdLine">
-                {book.is_read ? "Lest✔" : "Ikke lest"}
-                <button
-                  className="seeMorebtn"
-                  onClick={() => moreInfo(book, book.book_summary)}
-                >
-                  Se mer
-                </button>
-              </div>
-            </li>
-          ))}
       </ul>
 
       {showInfoWindow && (
