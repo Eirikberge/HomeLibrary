@@ -33,6 +33,18 @@
     border  : solid;
   }
 
+
+  /*OversikftInfoboks*/
+  .topRightButtonContainer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .topRightButton {
+    font-size: 8px;
+  }
+
   /*OversikftInfoboks*/
   .infoHeadline{
     text-align: center;
@@ -47,7 +59,7 @@
     margin-bottom: 20px;
   }
 
-  /*Søkebar*/
+  /* Søkebar
   .Searchbar {
     background-color: #eee;
     height: 100px;
@@ -57,7 +69,7 @@
     flex-direction: column;
     align-items: center;
     min-width: 200px;
-  }
+  } */
 
 
   /* Legge til ny bok */

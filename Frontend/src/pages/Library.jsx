@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import BookList from "../src/components/booksList";
+import BookList from "../components/booksList";
 
 function Library() {
   const [showStartInterface, setStartinterface] = useState(true);
@@ -47,6 +47,17 @@ function Library() {
       console.error("Error fetching books:", error);
     }
   };
+
+  const addSummary = async (bookId, bookSummary) => {
+    try {
+      await axios.patch(`http://localhost:2222/summary/${bookId}/`, {
+        text: bookSummary,
+      });
+      fetchBooks();
+    }catch(error) {
+      console.error("Error adding summary:", error);
+    }
+  };
 //#endregion
   return (
     <div>
@@ -61,7 +72,7 @@ function Library() {
       )}
 
       {showBookList && (
-        <BookList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} />
+        <BookList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} addSummary={addSummary} />
       )}
     </div>
   );

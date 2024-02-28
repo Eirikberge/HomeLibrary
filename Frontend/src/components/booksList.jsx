@@ -1,46 +1,56 @@
 import React, { useState } from "react";
 import SearchBar from "./searchbar";
 
-const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
+const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
   const [selectedBook, setSelectetBook] = useState(null);
   const [showSummary, setShowSummary] = useState(true);
   const [showTextboxSummary, setShowTextboxSummary] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [isBoxChecked, setIsBokxChecked] = useState(false);
+  const [isBoxChecked, setIsBoxChecked] = useState(false);
   const [newInputText, setNewInputText] = useState("");
+  const [saveBtn, setSaveBtn] = useState(false);
+
+  const [searchResults, setSearchResults] = useState([]);
 
   const moreInfo = (book, bookSummary) => {
     setSelectetBook(book);
-    setInputText(bookSummary)
+    setNewInputText(bookSummary);
     setShowInfoWindow(true);
+    setIsBoxChecked(book.is_read);
+    setSaveBtn(false);
   };
   const hideInfo = () => {
     setShowInfoWindow(false);
     setShowSummary(true);
-    setInputText('')
     setShowTextboxSummary(false);
-    isBoxChecked(false);
-
   };
   const handleCheckboxChange = () => {
-    isBoxChecked(true);
+    // funker bare en gang, må endres!
+    setIsBoxChecked(!isBoxChecked);
+    setSaveBtn(true);
   };
-  const showTextboxWithSummary = (bookSummary) => {
-    setInputText(bookSummary);
+  const showTextboxWithSummary = () => {
+    setSaveBtn(true);
     setShowSummary(false);
     setShowTextboxSummary(true);
   };
-  const changeInfo = (bookId, isRead, bookSummary) => {
-    if (isBoxChecked) changeIsRead(bookId, isRead);
-    if (inputText =! newInputText) saveSummary(bookId, bookSummary);
+  const changeInfo = (bookId, bookSummary) => {
+    if (selectedBook.is_read !== isBoxChecked)
+      changeIsRead(bookId, selectedBook.is_read);
+    if (newInputText !== selectedBook.book_summary)
+      addSummary(bookId, bookSummary);
+    setShowTextboxSummary(false);
+    setShowSummary(true);
   };
 
   return (
     <div>
-      <div className="Searchbar">
         <div className="search-bar-container">
-          <SearchBar />
+          <SearchBar setSearchResults={setSearchResults} />
+          <div>
+            {searchResults.map((result, id) => {
+              // return <div key={id}>{result.book_name}</div>;
+            })}
         </div>
       </div>
 
@@ -56,7 +66,10 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
               </div>
               <div className="thirdLine">
                 {book.is_read ? "Lest✔" : "Ikke lest"}
-                <button className="seeMorebtn" onClick={() => moreInfo(book, book.book_summary)}>
+                <button
+                  className="seeMorebtn"
+                  onClick={() => moreInfo(book, book.book_summary)}
+                >
                   Se mer
                 </button>
               </div>
@@ -70,46 +83,52 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead }) => {
             <h1>{selectedBook.book_name}</h1>
             <h2>Av: {getAuthorNameById(selectedBook.author_id)}</h2>
           </div>
+          <div className="topRightButtonContainer">
+            <button className="topRightButton" onClick={() => hideInfo()}>
+              X
+            </button>
+          </div>
           <label>
             <input
               type="checkbox"
               id={`checkbox_${selectedBook.book_id}`}
-              checked={selectedBook.is_read}
+              checked={isBoxChecked}
               onChange={() =>
                 handleCheckboxChange(selectedBook.book_id, selectedBook.is_read)
               }
             />
-            {selectedBook.isRead ? "Lest" : "Ikke lest"}
+            {isBoxChecked ? "Lest" : "Ikke lest"}
           </label>
 
           <h4>Sammendrag:</h4>
           {showSummary && (
             <div
-            className="summaryBox"
-            onClick={() => showTextboxWithSummary(selectedBook.book_summary)}
+              className="summaryBox"
+              onClick={() => showTextboxWithSummary(selectedBook.book_summary)}
             >
-              {selectedBook.book_summary}
+              {newInputText}
             </div>
           )}
 
           {showTextboxSummary && (
             <div>
-              <textarea id="textInput" value={newInputText} onChange={(e) => setNewInputText(e.target.value)} rows={5} cols={50} />
+              <textarea
+                id="textInput"
+                value={newInputText}
+                onChange={(e) => setNewInputText(e.target.value)}
+                rows={5}
+                cols={50}
+              />
             </div>
           )}
-
           <button onClick={() => hideInfo()}>Tilbake</button>
-          <button
-            onClick={() =>
-              changeInfo(
-                selectedBook.book_id,
-                selectedBook.isRead,
-                selectedBook.book_summary
-              )
-            }
-          >
-            Lagre
-          </button>
+          {saveBtn && (
+            <button
+              onClick={() => changeInfo(selectedBook.book_id, newInputText)}
+            >
+              Lagre
+            </button>
+          )}
         </div>
       )}
     </div>

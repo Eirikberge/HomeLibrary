@@ -1,8 +1,8 @@
 import Navbar from "./Navbar";
 import Startpage from "./pages/Startpage"
-import Library from "../Pages/Library";
-import Everything from "../Pages/Everything";
-import MyPage from "../Pages/Mypage";
+import Library from "./pages/Library";
+import Everything from "./pages/Everything";
+import MyPage from "./pages/Mypage";
 import { Route, Routes } from "react-router-dom";
 
 function App() {

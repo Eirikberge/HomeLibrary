@@ -21,10 +21,10 @@ const BooksListTEST = ({
   };
 
   const save = () => {
-    addSummaryToDatabase(inputText, selectedBookId);
+    addSummaryToDatabase(selectedBookId, inputText);
     setShowSummaryTextbox(false);
   };
-
+//     DISSE MÅ SLÅS SAMMEN
   const remove = () => {
     setShowSummaryTextbox(false);
     setSelectedBookId(null);

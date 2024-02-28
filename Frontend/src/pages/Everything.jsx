@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AuthorsListTEST from "../src/components/TestLists/TESTauthorList";
-import BooksListTEST from "../src/components/TestLists/TESTbooksList";
+import AuthorsListTEST from "../components/TestLists/TESTauthorList";
+import BooksListTEST from "../components/TestLists/TESTbooksList";
 
 function Everything() {
   const [authors, setAuthors] = useState([]);
@@ -55,11 +55,12 @@ function Everything() {
     }
   };
 
-  const addSummaryToDatabase = async (summaryText, bookId) => {
+  const addSummaryToDatabase = async (bookId, summaryText) => {
     try {
       await axios.patch(`http://localhost:2222/summary/${bookId}/`, {
         text: summaryText,
       });
+      fetchBooks();
     } catch (error) {
       console.error("Error fetching books:", error);
     }
