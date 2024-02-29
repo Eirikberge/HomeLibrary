@@ -23,7 +23,7 @@
     font-size: 12px;
 }
 .infoWindow {
-  background-color: rgb(128, 78, 78);
+  background-color: rgb(190, 181, 181);
     width: 500px;
     height: 500px;
     position: fixed;
@@ -61,13 +61,14 @@
   }
 
   /* Legge til ny bok */
-  .addBookBox {
+  .addingBox {
     background-color: beige;
     width: 400px;
     height: 400px;
     border: solid;
   }
 
+    /* Scroller */
   .scroll-container{
     max-height: 500px;
     overflow-y: auto;
