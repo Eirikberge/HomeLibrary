@@ -11,7 +11,7 @@ const SearchbarAuthors = ({setSearchResultsAuthors}) => {
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((author) => {
-          return author.author_name && author.author_name.toLowerCase().includes(value.toLowerCase());
+          return author.author_name && author.author_id && author.author_name.toLowerCase().includes(value.toLowerCase());
         });
         setSearchResultsAuthors(results);
       })

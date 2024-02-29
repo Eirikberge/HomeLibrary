@@ -11,7 +11,7 @@ const SearchbarBooks = ({setSearchResults}) => {
       .then((response) => response.json())
       .then((json) => {
         const results = json.filter((book) => {
-          return book.book_name && book.book_name.toLowerCase().includes(value.toLowerCase());
+          return book.book_name && book.author_id && book.book_name.toLowerCase().includes(value.toLowerCase());
         });
         setSearchResults(results);
       })

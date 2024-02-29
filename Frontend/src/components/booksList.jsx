@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SearchbarBooks from "./SearchBarBooks";
+import SearchbarAuthors from "./SearchbarAuthors";
 
 const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
@@ -11,6 +12,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [saveBtn, setSaveBtn] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
 
   const moreInfo = (book, bookSummary) => {
     setSelectetBook(book);
@@ -49,14 +51,22 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
       <ul className="listContainer">
         <div className="search-bar-container">
           <SearchbarBooks setSearchResults={setSearchResults} />
+          <SearchbarAuthors setSearchResultsAuthors={setSearchResultsAuthors} />
+
           <div>
             {books
               .filter(
                 (book) =>
-                  searchResults.length === 0 ||
-                  searchResults.some(
-                    (result) => result.book_name === book.book_name
-                  )
+                  (searchResults.length === 0 ||
+                    searchResults.some(
+                      (result) =>
+                        result.book_name === book.book_name ||
+                        result.author_id === book.author_id
+                    )) &&
+                  (searchResultsAuthors.length === 0 ||
+                    searchResultsAuthors.some(
+                      (author) => author.author_id === book.author_id
+                    ))
               )
               .sort((a, b) => a.book_name.localeCompare(b.book_name))
               .map((book) => (

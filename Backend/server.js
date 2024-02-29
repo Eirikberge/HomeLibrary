@@ -16,7 +16,7 @@ app.get("/books", async (req, res) => {
 });
 app.get("/books/:authorId", async (req, res) => {
     const authorId = req.params.authorId;
-    const info = await db.getAllBooksFromAuthor(authorId);
+    const info = await db.getBooks(authorId);
     res.send(info);
 });
 app.patch("/bookisread/:bookId/:change", async (req, res) => {

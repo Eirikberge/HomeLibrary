@@ -13,8 +13,8 @@ const AuthorsListTEST = ({
     fetchAllBooksFromAuthor(authorId);
   };
   const hideBooksFromAuthor = () => {
-    setShowBooksFromAuthor(false)
-  }
+    setShowBooksFromAuthor(false);
+  };
 
   return (
     <div>
@@ -23,9 +23,12 @@ const AuthorsListTEST = ({
         <ul>
           {authors.map((author) => (
             <li key={author.author_id}>
-                <h3>{author.author_name} {' '} <button onClick={() => handleShowButton(author.author_id)}>
-              Se bøker</button></h3>
-             
+              <h3>
+                {author.author_name}{" "}
+                <button onClick={() => handleShowButton(author.author_id)}>
+                  Se bøker
+                </button>
+              </h3>
             </li>
           ))}
         </ul>
@@ -41,17 +44,13 @@ const AuthorsListTEST = ({
               ? getAuthorNameById(booksFromAuthor[0].author_id)
               : "Velg forfatter"}
           </h1>
-          {booksFromAuthor.length > 0 ? (
-            <ul>
-              {booksFromAuthor.map((bookFromAuthor) => (
-                <li key={bookFromAuthor.book_id}>
-                  <p>Tittel: {bookFromAuthor.book_name} </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p></p>
-          )}
+          <ul>
+            {booksFromAuthor.map((bookFromAuthor) => (
+              <li key={bookFromAuthor.book_id}>
+                <p>Tittel: {bookFromAuthor.book_name} </p>
+              </li>
+            ))}
+          </ul>
           <button onClick={() => hideBooksFromAuthor()}>Tilbake</button>
         </div>
       )}
