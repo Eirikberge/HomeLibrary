@@ -11,7 +11,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [newInputText, setNewInputText] = useState("");
   const [saveBtn, setSaveBtn] = useState(false);
 
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsBooks, setSearchResultsBooks] = useState([]);
   const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
 
   const moreInfo = (book, bookSummary) => {
@@ -43,50 +43,48 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
       addSummary(bookId, bookSummary);
     setShowTextboxSummary(false);
     setShowSummary(true);
+    setSaveBtn(false);
   };
 
   return (
     <div>
       <h1>Bokhylle</h1>
+      <div className="search-bar-container">
+        <SearchbarBooks setSearchResultsBooks={setSearchResultsBooks} />
+        <SearchbarAuthors setSearchResultsAuthors={setSearchResultsAuthors} />
+      </div>
       <ul className="listContainer">
-        <div className="search-bar-container">
-          <SearchbarBooks setSearchResults={setSearchResults} />
-          <SearchbarAuthors setSearchResultsAuthors={setSearchResultsAuthors} />
-
-          <div>
-            {books
-              .filter(
-                (book) =>
-                  (searchResults.length === 0 ||
-                    searchResults.some(
-                      (result) =>
-                        result.book_name === book.book_name ||
-                        result.author_id === book.author_id
-                    )) &&
-                  (searchResultsAuthors.length === 0 ||
-                    searchResultsAuthors.some(
-                      (author) => author.author_id === book.author_id
-                    ))
-              )
-              .sort((a, b) => a.book_name.localeCompare(b.book_name))
-              .map((book) => (
-                <li key={book.book_id} className="listItem">
-                  <div className="firstLine">Tittel: {book.book_name}</div>
-                  <div className="secondLine">
-                    Forfatter: {getAuthorNameById(book.author_id)}{" "}
-                  </div>
-                  <div className="thirdLine">
-                    {book.is_read ? "Lest✔" : "Ikke lest"}
-                    <button
-                      className="seeMorebtn"
-                      onClick={() => moreInfo(book, book.book_summary)}
-                    >
-                      Se mer
-                    </button>
-                  </div>
-                </li>
-              ))}
-          </div>
+        <div className="scroll-container">
+          {books
+            .filter(
+              (book) =>
+                (searchResultsBooks.length === 0 ||
+                  searchResultsBooks.some(
+                    (result) => result.book_name === book.book_name
+                  )) &&
+                (searchResultsAuthors.length === 0 ||
+                  searchResultsAuthors.some(
+                    (author) => author.author_id === book.author_id
+                  ))
+            )
+            .sort((a, b) => a.book_name.localeCompare(b.book_name))
+            .map((book) => (
+              <li key={book.book_id} className="listItem">
+                <div className="firstLine">Tittel: {book.book_name}</div>
+                <div className="secondLine">
+                  Forfatter: {getAuthorNameById(book.author_id)}{" "}
+                </div>
+                <div className="thirdLine">
+                  {book.is_read ? "Lest✔" : "Ikke lest"}
+                  <button
+                    className="seeMorebtn"
+                    onClick={() => moreInfo(book, book.book_summary)}
+                  >
+                    Se mer
+                  </button>
+                </div>
+              </li>
+            ))}
         </div>
       </ul>
 

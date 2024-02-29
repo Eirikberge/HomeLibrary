@@ -3,17 +3,17 @@ import { FaSearch } from "react-icons/fa";
 import "../styleSheets/SearchBar.css";
 
 
-const SearchbarBooks = ({setSearchResults}) => {
+const SearchbarBooks = ({setSearchResultsBooks}) => {
   const [searchbarInput, setSearchbarInput] = useState([]);
 
   const fetchData = (value) => {
     fetch("http://localhost:2222/books")
       .then((response) => response.json())
       .then((json) => {
-        const results = json.filter((book) => {
-          return book.book_name && book.author_id && book.book_name.toLowerCase().includes(value.toLowerCase());
+        const results = json.filter((books) => {
+          return books.book_name && books.author_id && books.book_name.toLowerCase().includes(value.toLowerCase());
         });
-        setSearchResults(results);
+        setSearchResultsBooks(results);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
