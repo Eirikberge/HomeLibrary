@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SearchBar from "./searchbar";
+import SearchbarBooks from "./SearchBarBooks";
 
 const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
@@ -45,10 +45,10 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
 
   return (
     <div>
+      <h1>Bokhylle</h1>
       <ul className="listContainer">
-        <h1>Bokhylle</h1>
         <div className="search-bar-container">
-          <SearchBar setSearchResults={setSearchResults} />
+          <SearchbarBooks setSearchResults={setSearchResults} />
           <div>
             {books
               .filter(

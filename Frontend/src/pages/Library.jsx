@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BookList from "../components/booksList";
 
 function Library() {
-  const [showStartInterface, setStartinterface] = useState(true);
   const [books, setBooks] = useState([]);
   const [authors, setAuthors] = useState([]);
-  const [showBookList, setShowBookList] = useState(false);
 
-  const showBooks = () => {
-    setStartinterface(false);
-    setShowBookList(true);
-    fetchBooks();
+  useEffect(() => {
     fetchAuthors();
-  };
-//#region API-calls
+    fetchBooks();
+  }, []);
+
+  //#region API-calls
   const fetchBooks = async () => {
     try {
       const response = await axios.get("http://localhost:2222/books");
@@ -54,26 +51,19 @@ function Library() {
         text: bookSummary,
       });
       fetchBooks();
-    }catch(error) {
+    } catch (error) {
       console.error("Error adding summary:", error);
     }
   };
-//#endregion
+  //#endregion
   return (
     <div>
-      {showStartInterface && (
-        <div>
-          <h2>"Overskrift":</h2>
-          <p>
-            <button onClick={showBooks}>Vis alle bøker</button>{" "}
-            <button>Vis alle forfattere</button>
-          </p>
-        </div>
-      )}
-
-      {showBookList && (
-        <BookList books={books} getAuthorNameById={getAuthorNameById} changeIsRead={changeIsRead} addSummary={addSummary} />
-      )}
+      <BookList
+        books={books}
+        getAuthorNameById={getAuthorNameById}
+        changeIsRead={changeIsRead}
+        addSummary={addSummary}
+      />
     </div>
   );
 }

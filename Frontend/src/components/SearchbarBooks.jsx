@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import "../styleSheets/SearchBar.css";
 
 
-const SearchBar = ({setSearchResults}) => {
+const SearchbarBooks = ({setSearchResults}) => {
   const [searchbarInput, setSearchbarInput] = useState([]);
 
   const fetchData = (value) => {
@@ -28,7 +28,7 @@ const SearchBar = ({setSearchResults}) => {
     <div className="input-wrapper">
       <FaSearch id="search-icon" />
       <input
-        placeholder="Type to search..."
+        placeholder="Søk etter bok..."
         value={searchbarInput}
         onChange={(e) => handleChange(e.target.value)}
       />
@@ -36,4 +36,4 @@ const SearchBar = ({setSearchResults}) => {
   );
 };
 
-export default SearchBar;
+export default SearchbarBooks;
