@@ -24,6 +24,7 @@ const SearchbarBooks = ({setSearchResultsBooks}) => {
     setSearchbarInput(value);
     fetchData(value);
   };
+  
   return (
     <div className="input-wrapper">
       <FaSearch id="search-icon" />

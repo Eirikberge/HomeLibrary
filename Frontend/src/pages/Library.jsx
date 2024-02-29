@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BookList from "../components/booksList";
+import "../styleSheets/library.css";
 
 function Library() {
   const [books, setBooks] = useState([]);
@@ -41,7 +42,7 @@ function Library() {
       await axios.patch(`http://localhost:2222/bookisread/${bookId}/${change}`);
       fetchBooks();
     } catch (error) {
-      console.error("Error fetching books:", error);
+      console.error("Error change read status:", error);
     }
   };
 
@@ -66,5 +67,5 @@ function Library() {
       />
     </div>
   );
-}
+};
 export default Library;

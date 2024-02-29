@@ -8,8 +8,9 @@ function AddAndDelete() {
   const [deleteAuthorBox, setShowDeleteAuthorBox] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [books, setBooks] = useState([]);
-  const [bookTitleInput, setInputValue] = useState("");
-  const [authorNameInput, setInputValueAuthor] = useState("");
+  const [bookNameInput, setBookNameInput] = useState("");
+  const [authorNameInput, setAuthorNameInput] = useState("");
+  const [selectedBook, setSelctedBook] = useState("");
   const [selectedAuthor, setSelctedAuthor] = useState("");
 
   const fetchAuthors = async () => {
@@ -28,17 +29,20 @@ function AddAndDelete() {
       console.error("Error fetching books:", error);
     }
   };
-  const addBookToDB = async () => {
+  const addBook = async () => {
     setShowAddBookBox(false);
     setShowAddAuthorBox(false);
     try {
       await axios.post(`http://localhost:2222/addbooktodb/${selectedAuthor}/`, {
-        bookTitle: bookTitleInput,
+        bookName: bookNameInput,
       });
     } catch (error) {
       console.error("Error adding book:", error);
     }
   };
+  const addAuthor = async () => {};
+  const deleteBook = async () => {};
+  const deleteAuthor = async () => {};
 
   const showAddBookBox = () => {
     clearWindows();
@@ -51,44 +55,45 @@ function AddAndDelete() {
     fetchAuthors();
     setShowAddAuthorBox(true);
   };
-  const showDeleteBook = () => {
+  const showDeleteBookBox = () => {
     clearWindows();
     setShowDeleteBookBox(true);
   };
-  const showDeleteAuthor = () => {
+  const showDeleteAuthorBox = () => {
     clearWindows();
     setShowDeleteAuthorBox(true);
+  };
+  const handleBookChoice = (e) => {
+    setSelctedBook(e.target.value);
   };
   const handleAuthorChoice = (e) => {
     setSelctedAuthor(e.target.value);
   };
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+  const handleInputBook = (e) => {
+    setBookNameInput(e.target.value);
   };
-  const handleInputChangeAuthor = (e) => {
-    setInputValueAuthor(e.target.value);
+  const handleInputAuthor = (e) => {
+    setAuthorNameInput(e.target.value);
   };
-  const handleInputChangeDeleteBook = (e) => {
-    setInputValueAuthor(e.target.value);
-  };
-  const handleInputChangeDeleteAuthor = (e) => {
-    setInputValueAuthor(e.target.value);
+  const clearSelected = () => {
+    setSelctedBook('')
+    setSelctedAuthor('')
   };
   const clearWindows = () => {
+    clearSelected();
     setShowAddAuthorBox(false);
     setShowAddBookBox(false);
     setShowDeleteBookBox(false);
     setShowDeleteAuthorBox(false);
   };
 
-
   return (
     <div>
       <h1>Legg til bok eller forfatter</h1>
       <button onClick={() => showAddBookBox()}>Legg til bok</button>{" "}
       <button onClick={() => showAddAuthorBox()}>Legg til forfatter</button>{" "}
-      <button onClick={() => showDeleteBook()}>Slett bok</button>{" "}
-      <button onClick={() => showDeleteAuthor()}>Slett forfatter</button>
+      <button onClick={() => showDeleteBookBox()}>Slett bok</button>{" "}
+      <button onClick={() => showDeleteAuthorBox()}>Slett forfatter</button>
       {addBookBox && (
         <div className="addingBox">
           <h1 style={{ display: "flex", justifyContent: "center" }}>
@@ -98,8 +103,8 @@ function AddAndDelete() {
           <input
             type="text"
             id="bookTitleInput"
-            value={bookTitleInput}
-            onChange={handleInputChange}
+            value={bookNameInput}
+            onChange={handleInputBook}
           />
           <br />
           <label htmlFor="authorNameInput">Forfatter: </label>
@@ -107,28 +112,26 @@ function AddAndDelete() {
             type="text"
             id="authorNameInput"
             value={authorNameInput}
-            onChange={handleInputChangeDeleteAuthor}
+            onChange={handleAuthorChoice} // må se an når jeg kan velge forfattere.
           />
-
-          <div>
-            <label htmlFor="authorChoice">Velg forfatter:</label>
-            <select
-              id="authorChoice"
-              value={selectedAuthor}
-              onChange={handleAuthorChoice}
-            >
-              <option>Finn forfatter...</option>
-              {authors.map((author) => (
-                <option key={author.author_id} value={author.author_id}>
-                  {author.author_name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            id="authorChoice"
+            value={selectedAuthor}
+            onChange={handleAuthorChoice}
+          >
+            <option>Finn forfatter...</option>
+            {authors.map((author) => (
+              <option key={author.author_id} value={author.author_id}>
+                {author.author_name}
+              </option>
+            ))}
+          </select>
 
           <br />
+          <br />
+
           <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addBookToDB()}>Lagre</button>
+          <button onClick={() => addBook()}>Lagre</button>
         </div>
       )}
       {addAuthorBox && (
@@ -141,12 +144,14 @@ function AddAndDelete() {
             type="text"
             id="authorNameInput"
             value={authorNameInput}
-            onChange={handleInputChangeAuthor}
+            onChange={handleInputAuthor}
           />
+
           <br />
           <br />
+
           <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addBookToDB()}>Lagre</button>
+          <button onClick={() => addAuthor()}>Lagre</button>
         </div>
       )}
       {deleteBookBox && (
@@ -158,13 +163,27 @@ function AddAndDelete() {
           <input
             type="text"
             id="bookTitleInput"
-            value={bookTitleInput}
-            onChange={handleInputChangeDeleteBook}
+            value={bookNameInput}
+            onChange={handleBookChoice}
           />
+          <select
+            id="bookChoice"
+            value={selectedBook}
+            onChange={handleBookChoice}
+          >
+            <option>Finn bok...</option>
+            {books.map((book) => (
+              <option key={book.book_id} value={book.book_id}>
+                {book.book_name}
+              </option>
+            ))}
+          </select>
+
           <br />
           <br />
+
           <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addBookToDB()}>Lagre</button>
+          <button onClick={() => deleteBook()}>Lagre</button>
         </div>
       )}
       {deleteAuthorBox && (
@@ -177,12 +196,26 @@ function AddAndDelete() {
             type="text"
             id="authorNameInput"
             value={authorNameInput}
-            onChange={handleInputChangeDeleteAuthor}
+            onChange={handleAuthorChoice}
           />
+          <select
+            id="authorChoice"
+            value={selectedAuthor}
+            onChange={handleAuthorChoice}
+          >
+            <option>Finn forfatter...</option>
+            {authors.map((author) => (
+              <option key={author.author_id} value={author.author_id}>
+                {author.author_name}
+              </option>
+            ))}
+          </select>
+
           <br />
           <br />
+
           <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addBookToDB()}>Lagre</button>
+          <button onClick={() => deleteAuthor()}>Lagre</button>
         </div>
       )}
     </div>

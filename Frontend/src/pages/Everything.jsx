@@ -83,6 +83,6 @@ function Everything() {
       />
     </div>
   );
-}
+};
 
 export default Everything;

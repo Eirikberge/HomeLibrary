@@ -1,0 +1,87 @@
+.listContainer {
+  display: grid;
+  width: 400px;
+}
+.listItem {
+  margin-bottom: 10px;
+}
+.firstLine {
+  background-color: rgb(235, 235, 235);
+  font-size: 24px;
+}
+.secondLine {
+  background-color: rgb(245, 245, 245);
+  font-size: 18px;
+}
+.thirdLine {
+  background-color: white;
+  font-size: 16px;
+  display: flex;
+}
+.seeMorebtn {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+/* Scroller */
+.scroll-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #a5a5a5;
+  border-radius: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.infoWindow {
+  background-color: rgb(190, 181, 181);
+  width: 500px;
+  height: 500px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  border: solid;
+}
+.topRightButtonContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.topRightButton {
+  font-size: 12px;
+}
+
+/*OversikftInfoboks*/
+.infoHeadline {
+  text-align: center;
+}
+
+/*Oppsumeringsfelt*/
+.summaryBox {
+  background-color: #eee;
+  height: 100px;
+  width: 400px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+/* Legge til ny bok */
+.addingBox {
+  background-color: beige;
+  width: 400px;
+  height: 400px;
+  border: solid;
+}

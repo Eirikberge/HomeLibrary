@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import Startpage from "./pages/Startpage"
+import StartPage from "./pages/StartPage";
 import Library from "./pages/Library";
 import Everything from "./pages/Everything";
 import AddAndDelete from "./pages/AddAndDelete";
@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <div className="selectedPageInfo">
       <Routes>
-        <Route path="/" element={<Startpage />}/>
+        <Route path="/" element={<StartPage />}/>
         <Route path="/library" element={<Library />}/>
         <Route path="/alt" element={<Everything />}/>
         <Route path="/addAndDelete" element={<AddAndDelete />}/>
