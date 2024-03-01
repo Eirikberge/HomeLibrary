@@ -58,7 +58,7 @@ function addSummary(bookId, text) {
   });
 };
 
-function addBook(selectedAuthor, bookTitle) {
+function addBook(selectedAuthor, bookName) {
   return new Promise((resolve, reject) => {
     const maxBookIdQuery = `SELECT MAX(book_id) AS maxBookId FROM dbo.Books`;
     sql.query(connectionString, maxBookIdQuery, (err, result) => {
@@ -68,7 +68,7 @@ function addBook(selectedAuthor, bookTitle) {
       }
       const maxBookId = result[0].maxBookId;
       const newBookId = maxBookId + 1;
-      const query = `INSERT INTO dbo.Books(book_id, book_name, author_id) VALUES(${newBookId}, '${bookTitle}', ${selectedAuthor})`;
+      const query = `INSERT INTO dbo.Books(book_id, book_name, author_id) VALUES(${newBookId}, '${bookName}', ${selectedAuthor})`;
       sql.query(connectionString, query, (err, rows) => {
         if (err) {
           reject(err);
@@ -80,10 +80,24 @@ function addBook(selectedAuthor, bookTitle) {
   });
 };
 
+function deleteBook(bookId) {
+  return new Promise((resolve, reject) => {
+    const query = `DELETE FROM dbo.Books WHERE book_id=${bookId}`;
+    sql.query(connectionString, query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
 module.exports = {
   getAuthors: getAuthors,
   getBooks: getBooks,
   changeIsRead: changeIsRead,
   addSummary: addSummary,
   addBook: addBook,
+  deleteBook: deleteBook,
 };

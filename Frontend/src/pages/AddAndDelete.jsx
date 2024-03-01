@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import "../styleSheets/AddAndDelete.css";
+
 
 function AddAndDelete() {
   const [addBookBox, setShowAddBookBox] = useState(false);
@@ -12,6 +14,16 @@ function AddAndDelete() {
   const [authorNameInput, setAuthorNameInput] = useState("");
   const [selectedBook, setSelctedBook] = useState("");
   const [selectedAuthor, setSelctedAuthor] = useState("");
+
+  const [searchResultsBook, setSearchResultsBook] = useState([]);
+  const [searchbarInput, setSearchbarInput] = useState([]);
+
+  useEffect(() => {
+    if (addBookBox || addAuthorBox || deleteBookBox || deleteAuthorBox) {
+      fetchBooks();
+      fetchAuthors();
+    }
+  }, [addBookBox, addAuthorBox, deleteBookBox, deleteAuthorBox]);
 
   const fetchAuthors = async () => {
     try {
@@ -29,9 +41,25 @@ function AddAndDelete() {
       console.error("Error fetching books:", error);
     }
   };
+  const fetchBooksSB = (value) => {
+    fetch("http://localhost:2222/books")
+      .then((response) => response.json())
+      .then((json) => {
+        const results = json.filter((books) => {
+          return (
+            books.book_name &&
+            books.book_id &&
+            books.book_name.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+        setSearchResultsBook(results);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
   const addBook = async () => {
-    setShowAddBookBox(false);
-    setShowAddAuthorBox(false);
+    clearWindows();
     try {
       await axios.post(`http://localhost:2222/addbooktodb/${selectedAuthor}/`, {
         bookName: bookNameInput,
@@ -41,18 +69,22 @@ function AddAndDelete() {
     }
   };
   const addAuthor = async () => {};
-  const deleteBook = async () => {};
+  const deleteBook = async () => {
+    clearWindows();
+    try {
+      await axios.delete(`http://localhost:2222/deletebook/${selectedBook}/`);
+    } catch (error) {
+      console.error("Error deleting book", error);
+    }
+  };
   const deleteAuthor = async () => {};
 
   const showAddBookBox = () => {
     clearWindows();
-    fetchBooks();
-    fetchAuthors();
     setShowAddBookBox(true);
   };
   const showAddAuthorBox = () => {
     clearWindows();
-    fetchAuthors();
     setShowAddAuthorBox(true);
   };
   const showDeleteBookBox = () => {
@@ -76,8 +108,8 @@ function AddAndDelete() {
     setAuthorNameInput(e.target.value);
   };
   const clearSelected = () => {
-    setSelctedBook('')
-    setSelctedAuthor('')
+    setSelctedBook("");
+    setSelctedAuthor("");
   };
   const clearWindows = () => {
     clearSelected();
@@ -85,6 +117,11 @@ function AddAndDelete() {
     setShowAddBookBox(false);
     setShowDeleteBookBox(false);
     setShowDeleteAuthorBox(false);
+  };
+
+  const handleSBChange = (value) => {
+    setSearchbarInput(value);
+    fetchBooksSB(value);
   };
 
   return (
@@ -101,18 +138,23 @@ function AddAndDelete() {
           </h1>
           <label htmlFor="bookTitleInput">Boktittel: </label>
           <input
+            placeholder="Skriv inn bok..."
             type="text"
             id="bookTitleInput"
             value={bookNameInput}
             onChange={handleInputBook}
           />
+
           <br />
+
           <label htmlFor="authorNameInput">Forfatter: </label>
           <input
+            placeholder="Skriv inn forfatter..."
             type="text"
             id="authorNameInput"
-            value={authorNameInput}
-            onChange={handleAuthorChoice} // må se an når jeg kan velge forfattere.
+            value={selectedAuthor}
+            onChange={(e) => handleAuthorChoice(e.target.value)} // må se an når jeg kan velge forfattere.
+            // onChange={(e) => handleChange(e.target.value)}
           />
           <select
             id="authorChoice"
@@ -126,12 +168,10 @@ function AddAndDelete() {
               </option>
             ))}
           </select>
-
-          <br />
-          <br />
-
-          <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addBook()}>Lagre</button>
+          <div className="addanddeleteBtns">
+            <button onClick={() => clearWindows()}>Tilbake</button>
+            <button onClick={() => addBook()}>Lagre</button>
+          </div>
         </div>
       )}
       {addAuthorBox && (
@@ -146,12 +186,14 @@ function AddAndDelete() {
             value={authorNameInput}
             onChange={handleInputAuthor}
           />
-
-          <br />
-          <br />
-
-          <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => addAuthor()}>Lagre</button>
+          <div className="addanddeleteBtns">
+            <button className="topLeftButton" onClick={() => clearWindows()}>
+              Tilbake
+            </button>
+            <button className="topLefttButton" onClick={() => addAuthor()}>
+              Lagre
+            </button>
+          </div>
         </div>
       )}
       {deleteBookBox && (
@@ -159,12 +201,12 @@ function AddAndDelete() {
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Slett bok:
           </h1>
-          <label htmlFor="bookTitleInput">Bok: </label>
+          <label htmlFor="bookChoiceSB">Bok: </label>
           <input
             type="text"
-            id="bookTitleInput"
-            value={bookNameInput}
-            onChange={handleBookChoice}
+            id="bookChoiceSB"
+            value={searchbarInput}
+            onChange={(e) => handleSBChange(e.target.value)}
           />
           <select
             id="bookChoice"
@@ -179,11 +221,17 @@ function AddAndDelete() {
             ))}
           </select>
 
-          <br />
-          <br />
+          <div className="searchResults">
+            {searchbarInput !== "" &&
+              searchResultsBook.map((result, id) => (
+                <div key={id}>{result.book_name}</div>
+              ))}
+          </div>
 
-          <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => deleteBook()}>Lagre</button>
+          <div className="addanddeleteBtns">
+            <button onClick={() => clearWindows()}>Tilbake</button>
+            <button onClick={() => deleteBook()}>Slett</button>
+          </div>
         </div>
       )}
       {deleteAuthorBox && (
@@ -210,12 +258,10 @@ function AddAndDelete() {
               </option>
             ))}
           </select>
-
-          <br />
-          <br />
-
-          <button onClick={() => clearWindows()}>Tilbake</button>
-          <button onClick={() => deleteAuthor()}>Lagre</button>
+          <div className="addanddeleteBtns">
+            <button onClick={() => clearWindows()}>Tilbake</button>
+            <button onClick={() => deleteAuthor()}>Slett</button>
+          </div>
         </div>
       )}
     </div>

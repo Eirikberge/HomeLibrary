@@ -33,8 +33,13 @@ app.patch("/summary/:bookId/", async (req, res) => {
 });
 app.post("/addbooktodb/:selectedAuthor/", async (req, res) => {
     const selectedAuthor = req.params.selectedAuthor;
-    const bookTitle = req.body.bookTitle;
-    const info = await db.addBook(selectedAuthor, bookTitle);
+    const bookName = req.body.bookName;
+    const info = await db.addBook(selectedAuthor, bookName);
+    res.send(info);
+});
+app.delete("/deletebook/:bookId", async(req, res) => {
+    const bookId = req.params.bookId;
+    const info = await db.deleteBook(bookId);
     res.send(info);
 })
 
