@@ -80,9 +80,44 @@ function addBook(selectedAuthor, bookName) {
   });
 };
 
+function addAuthor(authorName) {
+  return new Promise((resolve, reject) => {
+    const maxAuthorQuery = `SELECT MAX(author_id) AS maxAuthorId from dbo.Authors`;
+    sql.query(connectionString, maxAuthorQuery, (err, result) => {
+      if(err) {
+        reject(err);
+        return;
+      }
+      const maxAuthorId = result[0].maxAuthorId;
+      const newAuthorId = maxAuthorId + 1;
+      const query = `INSERT INTO dbo.Authors(author_id, author_name) VALUES(${newAuthorId}, '${authorName}')`;
+      sql.query(connectionString, query, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  });
+};
+
 function deleteBook(bookId) {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM dbo.Books WHERE book_id=${bookId}`;
+    sql.query(connectionString, query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+function deleteAuthor(authorId) {
+  return new Promise((resolve, reject) => {
+    const query = `DELETE FROM dbo.Authors WHERE author_id=${authorId}`; 
     sql.query(connectionString, query, (err, rows) => {
       if (err) {
         reject(err);
@@ -99,5 +134,7 @@ module.exports = {
   changeIsRead: changeIsRead,
   addSummary: addSummary,
   addBook: addBook,
+  addAuthor: addAuthor,
   deleteBook: deleteBook,
+  deleteAuthor: deleteAuthor,
 };

@@ -37,11 +37,21 @@ app.post("/addbooktodb/:selectedAuthor/", async (req, res) => {
     const info = await db.addBook(selectedAuthor, bookName);
     res.send(info);
 });
+app.post("/addauthor", async (req, res) => {
+    const authorName = req.body.authorName;
+    const info = await db.addAuthor(authorName)
+    res.send(info);
+});
 app.delete("/deletebook/:bookId", async(req, res) => {
     const bookId = req.params.bookId;
     const info = await db.deleteBook(bookId);
     res.send(info);
-})
+});
+app.delete("/deleteauthor/:authorId", async(req, res) => {
+    const authorId = req.params.authorId;
+    const info = await db.deleteAuthor(authorId);
+    res.send(info);
+});
 
 // post, get, patch, delete, put
 // lese på new Promise og async/awaits

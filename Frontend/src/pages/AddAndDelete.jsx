@@ -4,28 +4,26 @@ import "../styleSheets/AddAndDelete.css";
 
 
 function AddAndDelete() {
-  const [addBookBox, setShowAddBookBox] = useState(false);
-  const [addAuthorBox, setShowAddAuthorBox] = useState(false);
-  const [deleteBookBox, setShowDeleteBookBox] = useState(false);
-  const [deleteAuthorBox, setShowDeleteAuthorBox] = useState(false);
+  const [showBox, setShowBox] = useState ('')
   const [authors, setAuthors] = useState([]);
   const [books, setBooks] = useState([]);
-  const [bookNameInput, setBookNameInput] = useState("");
-  const [authorNameInput, setAuthorNameInput] = useState("");
-  const [selectedBook, setSelctedBook] = useState("");
+  const [bookNameInput, setBookNameInput] = useState('');
+  const [authorNameInput, setAuthorNameInput] = useState('');
+  const [selectedBook, setSelctedBook] = useState('');
   const [selectedAuthor, setSelctedAuthor] = useState("");
 
   const [searchbarPressed, setSearchbarPressed] = useState(true)
 
   const [searchResultsBook, setSearchResultsBook] = useState([]);
+  const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
   const [searchbarInput, setSearchbarInput] = useState([]);
 
   useEffect(() => {
-    if (addBookBox || addAuthorBox || deleteBookBox || deleteAuthorBox) {
+    if (showBox) {
       fetchBooks();
       fetchAuthors();
     }
-  }, [addBookBox, addAuthorBox, deleteBookBox, deleteAuthorBox]);
+  }, [showBox]);
 
   const fetchAuthors = async () => {
     try {
@@ -35,6 +33,7 @@ function AddAndDelete() {
       console.error("Error fetching authors:", error);
     }
   };
+
   const fetchBooks = async () => {
     try {
       const response = await axios.get("http://localhost:2222/books");
@@ -43,6 +42,7 @@ function AddAndDelete() {
       console.error("Error fetching books:", error);
     }
   };
+
   const fetchBooksSB = (value) => {
     fetch("http://localhost:2222/books")
       .then((response) => response.json())
@@ -60,8 +60,25 @@ function AddAndDelete() {
         console.error("Error fetching data:", error);
       });
   };
+  const fetchAuthorsSB = (value) => {
+    fetch("http://localhost:2222/authors")
+      .then((response) => response.json())
+      .then((json) => {
+        const results = json.filter((authors) => {
+          return (
+            authors.author_name &&
+            authors.author_id &&
+            authors.author_name.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+        setSearchResultsAuthors(results);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
   const addBook = async () => {
-    clearWindows();
     try {
       await axios.post(`http://localhost:2222/addbooktodb/${selectedAuthor}/`, {
         bookName: bookNameInput,
@@ -69,36 +86,41 @@ function AddAndDelete() {
     } catch (error) {
       console.error("Error adding book:", error);
     }
-  };
-  const addAuthor = async () => {};
-  const deleteBook = async () => {
     clearWindows();
+  };
+
+  const addAuthor = async () => {
+    try {
+      await axios.post(`http://localhost:2222/addauthor/`, {
+        authorName: authorNameInput,
+      });
+    } catch (error) {
+      console.log("Error adding author:", error);
+    }
+    clearWindows();
+  };
+
+  const deleteBook = async () => {
     try {
       await axios.delete(`http://localhost:2222/deletebook/${selectedBook}/`);
     } catch (error) {
       console.error("Error deleting book", error);
     }
-    setSearchbarPressed(true);
-    setSearchbarInput('')
+    clearWindows();
   };
-  const deleteAuthor = async () => {};
+  const deleteAuthor = async () => {
+    try {
+      await axios.delete(`http://localhost:2222/deleteauthor/${selectedAuthor}/`);
+    } catch (error) {
+      console.error("Error deleting author", error);
+    }
+    clearWindows();
+  };
 
-  const showAddBookBox = () => {
-    clearWindows();
-    setShowAddBookBox(true);
-  };
-  const showAddAuthorBox = () => {
-    clearWindows();
-    setShowAddAuthorBox(true);
-  };
-  const showDeleteBookBox = () => {
-    clearWindows();
-    setShowDeleteBookBox(true);
-  };
-  const showDeleteAuthorBox = () => {
-    clearWindows();
-    setShowDeleteAuthorBox(true);
-  };
+  const updateBox = (state) => {
+    clearWindows()
+    setShowBox(state);
+  }
   const handleBookChoice = (e) => {
     setSelctedBook(e.target.value);
   };
@@ -111,37 +133,43 @@ function AddAndDelete() {
   const handleInputAuthor = (e) => {
     setAuthorNameInput(e.target.value);
   };
-  const clearSelected = () => {
-    setSelctedBook("");
-    setSelctedAuthor("");
-  };
-  const clearWindows = () => {
-    clearSelected();
-    setShowAddAuthorBox(false);
-    setShowAddBookBox(false);
-    setShowDeleteBookBox(false);
-    setShowDeleteAuthorBox(false);
-  };
 
-  const handleSBChange = (value) => {
+  const handleSearchbarBook = (value) => {
     setSearchbarInput(value);
     fetchBooksSB(value);
   };
-
-  const handlesSearchBarClick = (id, name) => {
+  const handlesSearchBarClickBook = (id, name) => {
     setSelctedBook(id)
     setSearchbarInput(name)
     setSearchbarPressed(false)
-  }
+  };
+  const handleSearchbarAuthor = (value) => {
+    setSearchbarInput(value);
+    fetchAuthorsSB(value);
+  };
+  const handlesSearchBarClickAuthor = (id, name) => {
+    setSelctedAuthor(id)
+    setSearchbarInput(name)
+    setSearchbarPressed(false)
+  };
+  const clearWindows = () => {
+    setShowBox('')
+    setSearchbarPressed(true);
+    setSearchbarInput('')
+    setBookNameInput('')
+    setSelctedBook('');
+    setSelctedAuthor('');
+    setAuthorNameInput('')
+  };
 
   return (
     <div>
       <h1>Legg til bok eller forfatter</h1>
-      <button onClick={() => showAddBookBox()}>Legg til bok</button>{" "}
-      <button onClick={() => showAddAuthorBox()}>Legg til forfatter</button>{" "}
-      <button onClick={() => showDeleteBookBox()}>Slett bok</button>{" "}
-      <button onClick={() => showDeleteAuthorBox()}>Slett forfatter</button>
-      {addBookBox && (
+      <button onClick={() => updateBox('addBook')}>Legg til bok</button>{" "}
+      <button onClick={() => updateBox('addAuthor')}>Legg til forfatter</button>{" "}
+      <button onClick={() => updateBox('deleteBook')}>Slett bok</button>{" "}
+      <button onClick={() => updateBox('deleteAuthor')}>Slett forfatter</button>
+      {showBox === "addBook" && (
         <div className="addingBox">
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Legg til bok:
@@ -184,7 +212,7 @@ function AddAndDelete() {
           </div>
         </div>
       )}
-      {addAuthorBox && (
+      {showBox === "addAuthor" && (
         <div className="addingBox">
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Legg til forfatter:
@@ -206,7 +234,7 @@ function AddAndDelete() {
           </div>
         </div>
       )}
-      {deleteBookBox && (
+      {showBox === "deleteBook" && (
         <div className="addingBox">
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Slett bok:
@@ -216,7 +244,7 @@ function AddAndDelete() {
             type="text"
             id="bookChoiceSB"
             value={searchbarInput}
-            onChange={(e) => handleSBChange(e.target.value)}
+            onChange={(e) => handleSearchbarBook(e.target.value)}
           />
           <select
             id="bookChoice"
@@ -234,7 +262,7 @@ function AddAndDelete() {
           <div className="searchResults">
             {searchbarInput !== "" && searchbarPressed &&
               searchResultsBook.map((result, id) => (
-                <div  key={id} onClick={() => handlesSearchBarClick(result.book_id, result.book_name)}>{result.book_name}</div> // trykker på søkebarforslag
+                <div key={id} onClick={() => handlesSearchBarClickBook(result.book_id, result.book_name)}>{result.book_name}</div> // trykker på søkebarforslag
               ))}
           </div>
 
@@ -244,7 +272,7 @@ function AddAndDelete() {
           </div>
         </div>
       )}
-      {deleteAuthorBox && (
+      {showBox === "deleteAuthor" && (
         <div className="addingBox">
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Slett forfatter:
@@ -253,8 +281,8 @@ function AddAndDelete() {
           <input
             type="text"
             id="authorNameInput"
-            value={authorNameInput}
-            onChange={handleAuthorChoice}
+            value={searchbarInput}
+            onChange={(e) => handleSearchbarAuthor(e.target.value)}
           />
           <select
             id="authorChoice"
@@ -268,6 +296,14 @@ function AddAndDelete() {
               </option>
             ))}
           </select>
+
+          <div className="searchResults">
+            {searchbarInput !== "" && searchbarPressed &&
+              searchResultsAuthors.map((result, id) => (
+                <div key={id} onClick={() => handlesSearchBarClickAuthor(result.author_id, result.author_name)}>{result.author_name}</div> // trykker på søkebarforslag
+              ))}
+          </div>
+
           <div className="addanddeleteBtns">
             <button onClick={() => clearWindows()}>Tilbake</button>
             <button onClick={() => deleteAuthor()}>Slett</button>
