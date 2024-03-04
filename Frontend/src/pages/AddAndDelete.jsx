@@ -15,6 +15,8 @@ function AddAndDelete() {
   const [selectedBook, setSelctedBook] = useState("");
   const [selectedAuthor, setSelctedAuthor] = useState("");
 
+  const [searchbarPressed, setSearchbarPressed] = useState(true)
+
   const [searchResultsBook, setSearchResultsBook] = useState([]);
   const [searchbarInput, setSearchbarInput] = useState([]);
 
@@ -76,6 +78,8 @@ function AddAndDelete() {
     } catch (error) {
       console.error("Error deleting book", error);
     }
+    setSearchbarPressed(true);
+    setSearchbarInput('')
   };
   const deleteAuthor = async () => {};
 
@@ -123,6 +127,12 @@ function AddAndDelete() {
     setSearchbarInput(value);
     fetchBooksSB(value);
   };
+
+  const handlesSearchBarClick = (id, name) => {
+    setSelctedBook(id)
+    setSearchbarInput(name)
+    setSearchbarPressed(false)
+  }
 
   return (
     <div>
@@ -222,9 +232,9 @@ function AddAndDelete() {
           </select>
 
           <div className="searchResults">
-            {searchbarInput !== "" &&
+            {searchbarInput !== "" && searchbarPressed &&
               searchResultsBook.map((result, id) => (
-                <div key={id}>{result.book_name}</div>
+                <div  key={id} onClick={() => handlesSearchBarClick(result.book_id, result.book_name)}>{result.book_name}</div> // trykker på søkebarforslag
               ))}
           </div>
 
