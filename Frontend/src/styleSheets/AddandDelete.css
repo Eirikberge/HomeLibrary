@@ -1,3 +1,27 @@
-.addanddeleteBtns{
-    margin-left: 10px;
+/* Legge til ny bok */
+.addingBox {
+    position: relative;
+    background-color: beige;
+    width: 400px;
+    height: 300px;
+    border: solid;
+    margin-top: 10px;
 }
+.addingBox h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.addanddeleteBtns{
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+} 
+  .searchResults{
+    background-color: #ececec;
+    max-height: 100px;
+    overflow-y: auto;
+    width: 175px;
+    margin-left: 65px;
+  }
+  
