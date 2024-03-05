@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import BookList from "../components/booksList";
+import api from "../components/api";
+import BookList from "../components/LibraryBooksList";
 import "../styleSheets/library.css";
 
 function Library() {
@@ -15,7 +15,7 @@ function Library() {
   //#region API-calls
   const fetchBooks = async () => {
     try {
-      const response = await axios.get("http://localhost:2222/books");
+      const response = await api.get("/books");
       setBooks(response.data);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -24,7 +24,7 @@ function Library() {
 
   const fetchAuthors = async () => {
     try {
-      const response = await axios.get("http://localhost:2222/authors");
+      const response = await api.get("/authors");
       setAuthors(response.data);
     } catch (error) {
       console.error("Error fetching authors:", error);
@@ -39,7 +39,7 @@ function Library() {
   const changeIsRead = async (bookId, isRead) => {
     try {
       const change = isRead ? 0 : 1;
-      await axios.patch(`http://localhost:2222/bookisread/${bookId}/${change}`);
+      await api.patch(`/bookisread/${bookId}/${change}`);
       fetchBooks();
     } catch (error) {
       console.error("Error change read status:", error);
@@ -48,7 +48,7 @@ function Library() {
 
   const addSummary = async (bookId, bookSummary) => {
     try {
-      await axios.patch(`http://localhost:2222/summary/${bookId}/`, {
+      await api.patch(`/summary/${bookId}/`, {
         text: bookSummary,
       });
       fetchBooks();

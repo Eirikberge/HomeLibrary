@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import SearchbarBooks from "./SearchBarBooks";
-import SearchbarAuthors from "./SearchbarAuthors";
+import Searchbar from "./searchbar";
 
 const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
@@ -50,8 +49,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
     <div>
       <h1>Bokhylle</h1>
       <div className="search-bar-container">
-        <SearchbarBooks setSearchResultsBooks={setSearchResultsBooks} />
-        <SearchbarAuthors setSearchResultsAuthors={setSearchResultsAuthors} />
+        <Searchbar setSearchResultsBooks={setSearchResultsBooks} setSearchResultsAuthors={setSearchResultsAuthors} />
       </div>
       <ul className="listContainer">
         <div className="scroll-container">

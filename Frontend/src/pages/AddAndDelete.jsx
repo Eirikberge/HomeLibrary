@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../components/api";
 import "../styleSheets/AddAndDelete.css";
 
 function AddAndDelete() {
@@ -24,7 +24,7 @@ function AddAndDelete() {
 
   const fetchAuthors = async () => {
     try {
-      const response = await axios.get("http://localhost:2222/authors");
+      const response = await api.get("/authors");
       setAuthors(response.data);
     } catch (error) {
       console.error("Error fetching authors:", error);
@@ -33,7 +33,7 @@ function AddAndDelete() {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get("http://localhost:2222/books");
+      const response = await api.get("/books");
       setBooks(response.data);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -77,7 +77,7 @@ function AddAndDelete() {
 
   const addBook = async () => {
     try {
-      await axios.post(`http://localhost:2222/addbooktodb/${selectedAuthor}/`, {
+      await api.post(`/addbooktodb/${selectedAuthor}/`, {
         bookName: bookNameInput,
       });
     } catch (error) {
@@ -88,7 +88,7 @@ function AddAndDelete() {
 
   const addAuthor = async () => {
     try {
-      await axios.post(`http://localhost:2222/addauthor/`, {
+      await api.post(`/addauthor/`, {
         authorName: authorNameInput,
       });
     } catch (error) {
@@ -99,7 +99,7 @@ function AddAndDelete() {
 
   const deleteBook = async () => {
     try {
-      await axios.delete(`http://localhost:2222/deletebook/${selectedBook}/`);
+      await api.delete(`/deletebook/${selectedBook}/`);
     } catch (error) {
       console.error("Error deleting book", error);
     }
@@ -107,8 +107,8 @@ function AddAndDelete() {
   };
   const deleteAuthor = async () => {
     try {
-      await axios.delete(
-        `http://localhost:2222/deleteauthor/${selectedAuthor}/`
+      await api.delete(
+        `/deleteauthor/${selectedAuthor}/`
       );
     } catch (error) {
       console.error("Error deleting author", error);

@@ -20,15 +20,15 @@ const BooksListTEST = ({
     setInputText(summaryText);
   };
 
-  const save = () => {
-    addSummaryToDatabase(selectedBookId, inputText);
-    setShowSummaryTextbox(false);
-  };
-//     DISSE MÅ SLÅS SAMMEN
-  const remove = () => {
-    setShowSummaryTextbox(false);
+  const buttonAction = (action) => {
+    if( action === "save"){
+      addSummaryToDatabase(selectedBookId, inputText);
+    } else if (action === "cancel"){
+      setSelectedBookId(null);
+    }
     setSelectedBookId(null);
-  };
+
+  }
 
   return (
     <div>
@@ -71,8 +71,8 @@ const BooksListTEST = ({
             rows={3}
             cols={50}
           />
-          <button onClick={() => save()}>Lagre</button>
-          <button onClick={() => remove()}>Avbryt</button>
+          <button onClick={() => buttonAction("save")}>Lagre</button>
+          <button onClick={() => buttonAction("cancel")}>Avbryt</button>
         </div>
       )}
     </div>

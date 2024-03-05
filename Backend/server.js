@@ -53,7 +53,6 @@ app.delete("/deleteauthor/:authorId", async(req, res) => {
     res.send(info);
 });
 
-// post, get, patch, delete, put
 // lese på new Promise og async/awaits
 
 app.listen(2222, () => {

@@ -68,7 +68,7 @@ function addBook(selectedAuthor, bookName) {
       }
       const maxBookId = result[0].maxBookId;
       const newBookId = maxBookId + 1;
-      const query = `INSERT INTO dbo.Books(book_id, book_name, author_id) VALUES(${newBookId}, '${bookName}', ${selectedAuthor})`;
+      const query = `INSERT INTO dbo.Books(book_id, book_name, author_id, is_read) VALUES(${newBookId}, '${bookName}', ${selectedAuthor}, ${0})`;
       sql.query(connectionString, query, (err, rows) => {
         if (err) {
           reject(err);
