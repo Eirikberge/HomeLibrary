@@ -52,8 +52,38 @@ app.delete("/deleteauthor/:authorId", async(req, res) => {
     const info = await db.deleteAuthor(authorId);
     res.send(info);
 });
+app.post("/adduser", async(req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const info = await db.addUser(username, password)
+    res.send(info);
+})
+// app.post("/login", async(req, res) => {
+//     const username = req.body.username;
+//     const password = req.body.password;
+//     const info = await db.checkLogin(username, password)
+//     res.send(info);
+// })
 
-// lese på new Promise og async/awaits
+app.post("/login", async(req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const info = await db.checkLogin(username, password);
+
+    if (info.length > 0) {
+      // Hvis brukeren er funnet, send en vellykket respons
+      res.send({ success: true, message: 'Pålogging vellykket', user: info[0] });
+    } else {
+      // Hvis ingen bruker ble funnet, send en feilmelding
+      res.send({ success: false, message: 'Feil brukernavn eller passord' });
+    }
+  } catch (error) {
+    // Hvis det oppstår en feil, send en generell feilmelding
+    res.send({ success: false, message: 'Intern serverfeil' });
+  }
+});
 
 app.listen(2222, () => {
   console.log("listening");

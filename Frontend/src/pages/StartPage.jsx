@@ -1,3 +1,14 @@
-export default function StartPage() {
-    return <h1>Startside</h1>
-};
+import Register from "../components/Register"
+import Login from "../components/Login"
+
+const StartPage = () => {
+    return (
+        <div>
+            <Register />
+            <Login />
+
+        </div>
+    )
+}
+
+export default StartPage

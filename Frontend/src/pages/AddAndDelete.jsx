@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../components/api";
+import api from "../components/Api";
 import "../styleSheets/AddAndDelete.css";
 
 function AddAndDelete() {

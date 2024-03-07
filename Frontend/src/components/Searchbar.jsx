@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../styleSheets/SearchBar.css";
-import api from "./api";
-
+import api from "./Api";
 
 const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
   const [searchbarInputAuthor, setSearchbarInputAuthor] = useState("");
@@ -12,7 +11,7 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
     try {
       const response = await api.get("/books");
       const json = response.data;
-  
+
       const results = json.filter((books) => {
         return (
           books.book_name &&
@@ -20,17 +19,18 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
           books.book_name.toLowerCase().includes(value.toLowerCase())
         );
       });
-  
+
       setSearchResultsBooks(results);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   const fetchAuthors = async (value) => {
     try {
       const response = await api.get("/authors");
       const json = response.data;
-  
+
       const results = json.filter((authors) => {
         return (
           authors.author_name &&
@@ -38,7 +38,7 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
           authors.author_name.toLowerCase().includes(value.toLowerCase())
         );
       });
-  
+
       setSearchResultsAuthors(results);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -46,12 +46,13 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
   };
 
   const handleChangeBook = (value) => {
-    setSearchbarInputAuthor(value);
-    fetchAuthors(value);
-  };
-  const handleChangeAuthor = (value) => {
     setSearchbarInputBook(value);
     fetchBooks(value);
+  };
+
+  const handleChangeAuthor = (value) => {
+    setSearchbarInputAuthor(value);
+    fetchAuthors(value);
   };
 
   return (
@@ -60,13 +61,13 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
       <input
         placeholder="Søk etter bok..."
         value={searchbarInputBook}
-        onChange={(e) => handleChangeAuthor(e.target.value)}
+        onChange={(e) => handleChangeBook(e.target.value)}
       />
       <FaSearch id="search-icon" />
       <input
         placeholder="Søk etter forfatter..."
         value={searchbarInputAuthor}
-        onChange={(e) => handleChangeBook(e.target.value)}
+        onChange={(e) => handleChangeAuthor(e.target.value)}
       />
     </div>
   );

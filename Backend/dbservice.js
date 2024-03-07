@@ -14,14 +14,13 @@ function getAuthors() {
       }
     });
   });
-};
+}
 
 function getBooks(authorId = "") {
   return new Promise((resolve, reject) => {
     let query =
       "SELECT book_id, book_name, author_id, book_summary, is_read FROM dbo.Books";
-    if (authorId)
-    query += ` WHERE author_id=${authorId}`
+    if (authorId) query += ` WHERE author_id=${authorId}`;
     sql.query(connectionString, query, (err, rows) => {
       if (err) {
         reject(err);
@@ -30,7 +29,7 @@ function getBooks(authorId = "") {
       }
     });
   });
-};
+}
 
 function changeIsRead(bookId, change) {
   return new Promise((resolve, reject) => {
@@ -43,7 +42,7 @@ function changeIsRead(bookId, change) {
       }
     });
   });
-};
+}
 
 function addSummary(bookId, text) {
   return new Promise((resolve, reject) => {
@@ -56,7 +55,7 @@ function addSummary(bookId, text) {
       }
     });
   });
-};
+}
 
 function addBook(selectedAuthor, bookName) {
   return new Promise((resolve, reject) => {
@@ -78,13 +77,13 @@ function addBook(selectedAuthor, bookName) {
       });
     });
   });
-};
+}
 
 function addAuthor(authorName) {
   return new Promise((resolve, reject) => {
     const maxAuthorQuery = `SELECT MAX(author_id) AS maxAuthorId from dbo.Authors`;
     sql.query(connectionString, maxAuthorQuery, (err, result) => {
-      if(err) {
+      if (err) {
         reject(err);
         return;
       }
@@ -100,7 +99,7 @@ function addAuthor(authorName) {
       });
     });
   });
-};
+}
 
 function deleteBook(bookId) {
   return new Promise((resolve, reject) => {
@@ -113,11 +112,46 @@ function deleteBook(bookId) {
       }
     });
   });
-};
+}
 
 function deleteAuthor(authorId) {
   return new Promise((resolve, reject) => {
-    const query = `DELETE FROM dbo.Authors WHERE author_id=${authorId}`; 
+    const query = `DELETE FROM dbo.Authors WHERE author_id=${authorId}`;
+    sql.query(connectionString, query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+function addUser(username, password) {
+  return new Promise((resolve, reject) => {
+    const maxUserIdQuery = `SELECT MAX(user_id) AS maxUserId FROM dbo.Users`;
+    sql.query(connectionString, maxUserIdQuery, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const maxUserId = result[0].maxUserId;
+      const newUserId = maxUserId + 1;
+      const query = `INSERT INTO dbo.Users (user_id, user_name, user_password) VALUES(${newUserId}, '${username}', '${password}')`;
+      sql.query(connectionString, query, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  });
+};
+
+function checkLogin(username, password) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * From dbo.Users WHERE user_name='${username}' AND user_password='${password}'`;
     sql.query(connectionString, query, (err, rows) => {
       if (err) {
         reject(err);
@@ -137,4 +171,6 @@ module.exports = {
   addAuthor: addAuthor,
   deleteBook: deleteBook,
   deleteAuthor: deleteAuthor,
+  addUser: addUser,
+  checkLogin: checkLogin,
 };
