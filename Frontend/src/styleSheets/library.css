@@ -1,3 +1,10 @@
+.header-bokhylle{
+  font-size: 20px;
+  color: #383838;
+  display: flex;
+  margin-left: 40px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
 .listContainer {
   display: grid;
   width: 450px;
@@ -8,16 +15,28 @@
   margin: 2px;
 }
 .firstLine {
-  background-color: rgb(235, 235, 235);
+  background-color: hwb(49 83% 5%);
   font-size: 24px;
+  font-weight: 500;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #383838;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .secondLine {
-  background-color: rgb(245, 245, 245);
+  background-color: white;
   font-size: 18px;
+  font-weight: 100;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .thirdLine {
   background-color: white;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 100;
+  padding-bottom: 10px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
   display: flex;
 }
 .seeMorebtn {
@@ -27,7 +46,7 @@
 
 /* Scroller */
 .scroll-container {
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: auto;
   border: 1px solid #ccc;
 }
@@ -46,20 +65,20 @@
 }
 
 .infoWindow {
-  background-color: rgb(190, 181, 181);
-  width: 500px;
-  height: 500px;
+  background-color: hwb(49 83% 5%);
+  width: 450px;
+  height: 450px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 10px;
+  padding: 20px;
   border: solid;
 }
 .topRightButtonContainer {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
 }
 
 .topRightButton {
@@ -69,6 +88,8 @@
 /*OversikftInfoboks*/
 .infoHeadline {
   text-align: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 }
 
 /*Oppsumeringsfelt*/

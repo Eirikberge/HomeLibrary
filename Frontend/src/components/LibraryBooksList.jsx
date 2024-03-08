@@ -47,7 +47,10 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
 
   return (
     <div>
+      <div className="header-bokhylle">
       <h1>Bokhylle</h1>
+
+      </div>
       <div className="search-bar-container">
         <Searchbar setSearchResultsBooks={setSearchResultsBooks} setSearchResultsAuthors={setSearchResultsAuthors} />
       </div>
@@ -113,7 +116,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
           {showSummary && (
             <div
               className="summaryBox"
-              onClick={() => showTextboxWithSummary(selectedBook.book_summary)}
+              onClick={() => showTextboxWithSummary(selectedBook.book_summary)} // se på useRef
             >
               {newSummaryText}
             </div>
@@ -136,7 +139,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
               onClick={() => saveNewInfo(selectedBook.book_id, newSummaryText)}
             >
               Lagre
-            </button>
+            </button> // sette på en disabled istede?
           )}
         </div>
       )}

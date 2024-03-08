@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import StartPage from "./pages/StartPage";
 import Library from "./pages/Library";
 import Everything from "./pages/Everything";

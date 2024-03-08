@@ -1,10 +1,11 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import "../styleSheets/Navbar.css";
 
 export default function Navbar() {
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
-        Hjemmebibliotek
+        HJEMMEBIBLIOTEK
       </Link>
       <ul>
         <CustomLink to="library">Bibliotek</CustomLink>

@@ -5,12 +5,24 @@ const Login = () => {
   const [usernameLogin, setUsernameLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
 
+  const hashPassword = async (text) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+    return hashHex;
+  };
+
   const getLogin = async () => {
     try {
       console.log("Sjekker pålogging");
+      const hashedPassword = await hashPassword(passwordLogin);
+
       const response = await api.post(`/login`, {
         username: usernameLogin,
-        password: passwordLogin,
+        password: hashedPassword,
       });
 
       if (response.data.success) {
@@ -35,10 +47,14 @@ const Login = () => {
       <h1>Logg inn</h1>
 
       <label htmlFor="loginInputLogin">Brukernavn:</label>
-      <div>
+
+      {/* Bytte til Form fra Div, så kan jeg bruke enter */}
+      <div> 
+        
         <input
           type="text"
           id="loginInputLogin"
+          autoComplete="off"
           onChange={(e) => {
             setUsernameLogin(e.target.value);
           }}
@@ -54,6 +70,7 @@ const Login = () => {
           }}
         />
       </div>
+      <br />
       <button onClick={() => handleLogin()}>Logg inn</button>
     </div>
   );

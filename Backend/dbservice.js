@@ -15,7 +15,6 @@ function getAuthors() {
     });
   });
 }
-
 function getBooks(authorId = "") {
   return new Promise((resolve, reject) => {
     let query =
@@ -30,7 +29,6 @@ function getBooks(authorId = "") {
     });
   });
 }
-
 function changeIsRead(bookId, change) {
   return new Promise((resolve, reject) => {
     const query = `UPDATE dbo.Books SET is_read = ${change} WHERE book_id=${bookId}`;
@@ -43,7 +41,6 @@ function changeIsRead(bookId, change) {
     });
   });
 }
-
 function addSummary(bookId, text) {
   return new Promise((resolve, reject) => {
     const query = `UPDATE dbo.Books SET book_summary = '${text}' WHERE book_id=${bookId}`;
@@ -56,7 +53,6 @@ function addSummary(bookId, text) {
     });
   });
 }
-
 function addBook(selectedAuthor, bookName) {
   return new Promise((resolve, reject) => {
     const maxBookIdQuery = `SELECT MAX(book_id) AS maxBookId FROM dbo.Books`;
@@ -78,7 +74,6 @@ function addBook(selectedAuthor, bookName) {
     });
   });
 }
-
 function addAuthor(authorName) {
   return new Promise((resolve, reject) => {
     const maxAuthorQuery = `SELECT MAX(author_id) AS maxAuthorId from dbo.Authors`;
@@ -100,7 +95,6 @@ function addAuthor(authorName) {
     });
   });
 }
-
 function deleteBook(bookId) {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM dbo.Books WHERE book_id=${bookId}`;
@@ -113,7 +107,6 @@ function deleteBook(bookId) {
     });
   });
 }
-
 function deleteAuthor(authorId) {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM dbo.Authors WHERE author_id=${authorId}`;
@@ -126,7 +119,6 @@ function deleteAuthor(authorId) {
     });
   });
 }
-
 function addUser(username, password) {
   return new Promise((resolve, reject) => {
     const maxUserIdQuery = `SELECT MAX(user_id) AS maxUserId FROM dbo.Users`;
@@ -148,7 +140,6 @@ function addUser(username, password) {
     });
   });
 };
-
 function checkLogin(username, password) {
   return new Promise((resolve, reject) => {
     const query = `SELECT * From dbo.Users WHERE user_name='${username}' AND user_password='${password}'`;
