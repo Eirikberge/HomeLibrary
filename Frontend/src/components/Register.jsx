@@ -2,52 +2,50 @@ import { useState, useEffect } from "react";
 import api from "./Api";
 
 const Register = () => {
-  // const userRef = useRef();
-  // const errRef = useRef();
-
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
-  const [passwordRegRepeat, setPasswordRegRepeat] = useState("");
+  const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
   const [passwordRegErrMsg, setPasswordRegErrMsg] = useState("");
   const [passwordRegErrMsg2, setPasswordRegErrMsg2] = useState("");
   const [validName, setValidName] = useState("");
+  const [usernameAvailability, setUsernameAvailability] = useState(true);
   const [validPassword, setValidPassword] = useState("");
   const [usernameRegErrMsg, setUsernameRegErrMsg] = useState("");
+  const [usernameRegErrMsg2, setUsernameRegErrMsg2] = useState("");
 
   useEffect(() => {
-    checkValidUsername()
-    console.log(validName)
+    checkValidUsername();
+    checkUsernameAvailability();
   }, [usernameReg]);
 
   useEffect(() => {
-    checkValidPassword()
-    console.log(validPassword)
+    checkValidPassword();
   }, [passwordReg]);
 
-  const USER_REGEX = /^[A-z]{4,23}$/; 
+  //#region hashPassword
+  const USER_REGEX = /^[A-z]{4,23}$/;
   // const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-  
-  const PWD_REGEX = /^[A-z]{4,24}$/; 
+
+  const PWD_REGEX = /^[A-z]{4,24}$/;
   // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
   const hashPassword = async (text) => {
     const encoder = new TextEncoder();
     const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hashHex = hashArray
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
 
     return hashHex;
   };
+  //#endregion
 
   const addUser = async () => {
-    if (!validName) {
-      setUsernameRegErrMsg("Ugyldig brukernavn");
-    }
-    if (!validPassword) {
-      setPasswordRegErrMsg2("Ugyldig passord");
-    }
-    if (validName === true && validPassword === true && passwordReg === passwordRegRepeat) {
+    e.preventDefault()
+    resetErrMsgs();
+    if (validName && validPassword && passwordReg === confirmPasswordReg) {
       try {
         console.log("adding user");
         const hashedPassword = await hashPassword(passwordReg);
@@ -58,20 +56,58 @@ const Register = () => {
       } catch (error) {
         console.error("Error adding user:", error);
       }
-      setUsernameReg("");
-      setPasswordReg("");
-      setPasswordRegRepeat("");
-    } else setPasswordRegErrMsg("Passord matcher ikke");
+    } else {
+      if (!validName) {
+        setUsernameRegErrMsg("Ugyldig brukernavn");
+      }
+      if (!validPassword) {
+        setPasswordRegErrMsg2("Ugyldig passord");
+      }
+      if (passwordReg !== confirmPasswordReg) {
+        setPasswordRegErrMsg("Passord matcher ikke");
+      }
+      if (!usernameAvailability) {
+        setUsernameRegErrMsg2("Brukernavn er opptatt");
+      }
+    }
+    resetInput();
+  };
+
+  const checkUsernameAvailability = async () => {
+    try {
+      const response = await api.post(`/checkusername`, {
+        username: usernameReg,
+      });
+
+      setUsernameAvailability(response.data.available);
+    } catch (error) {
+      console.error("Error checking username availability:", error);
+    }
   };
 
   const checkValidUsername = () => {
-    setValidName(USER_REGEX.test(usernameReg))
-  }
+    setValidName(USER_REGEX.test(usernameReg));
+  };
   const checkValidPassword = () => {
-    setValidPassword(PWD_REGEX.test(passwordReg))
-  }
+    setValidPassword(PWD_REGEX.test(passwordReg));
+  };
+
+  const resetInput = () => {
+    setUsernameReg("");
+    setPasswordReg("");
+    setConfirmPasswordReg("");
+    setUsernameAvailability(true);
+  };
+
+  const resetErrMsgs = () => {
+    setPasswordRegErrMsg("");
+    setPasswordRegErrMsg2("");
+    setUsernameRegErrMsg("");
+    setUsernameRegErrMsg2("");
+  };
 
   return (
+    // Bruke form senere
     <div className="Register">
       <h1>Registrer</h1>
 
@@ -103,17 +139,19 @@ const Register = () => {
         <input
           type="password"
           id="passwordInputRegRepeat"
-          value={passwordRegRepeat}
+          value={confirmPasswordReg}
           onChange={(e) => {
-            setPasswordRegRepeat(e.target.value);
+            setConfirmPasswordReg(e.target.value);
           }}
         />
       </div>
       <div className="ErrorMsg">
         {passwordRegErrMsg !== "" && <span>{passwordRegErrMsg}</span>}
+        {passwordRegErrMsg2 !== "" && <span>{passwordRegErrMsg2}</span>}
       </div>
       <div className="ErrorMsg">
         {usernameRegErrMsg !== "" && <span>{usernameRegErrMsg}</span>}
+        {usernameRegErrMsg2 !== "" && <span>{usernameRegErrMsg2}</span>}
       </div>
       <br />
       <button onClick={() => addUser()}>Registrer</button>

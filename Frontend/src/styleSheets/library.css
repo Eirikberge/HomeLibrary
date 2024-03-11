@@ -1,19 +1,31 @@
-.header-bokhylle{
+.header-bokhylle {
   font-size: 20px;
   color: #383838;
   display: flex;
   margin-left: 40px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }
 .listContainer {
   display: grid;
-  width: 450px;
+  width: 500px;
   margin-left: 5x;
 }
 .listItem {
   margin-bottom: 10px;
   margin: 2px;
+  display: flex;
 }
+
+.img-container {
+  width: 75px;
+  background-color: lightgrey;
+}
+
+.content {
+  flex-grow: 1;
+}
+
 .firstLine {
   background-color: hwb(49 83% 5%);
   font-size: 24px;
@@ -21,7 +33,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   color: #383838;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .secondLine {
   background-color: white;
@@ -29,14 +41,14 @@
   font-weight: 100;
   padding-top: 10px;
   padding-bottom: 5px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .thirdLine {
   background-color: white;
   font-size: 18px;
   font-weight: 100;
   padding-bottom: 10px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS";
   display: flex;
 }
 .seeMorebtn {
@@ -88,8 +100,7 @@
 /*OversikftInfoboks*/
 .infoHeadline {
   text-align: center;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 /*Oppsumeringsfelt*/
@@ -100,4 +111,3 @@
   margin-top: 0px;
   margin-bottom: 20px;
 }
-

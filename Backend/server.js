@@ -84,6 +84,20 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/checkusername", async (req, res) => {
+  const username = req.body.username;
+  try {
+    const info = await db.getUsername(username);
+    if (info.length > 0) {
+      res.send({ available: false });
+    } else {
+      res.send({ available: true });
+    }
+  } catch (error) {
+    res.send({});
+  }
+});
+
 app.listen(2222, () => {
   console.log("listening");
 });

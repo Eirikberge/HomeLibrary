@@ -48,11 +48,13 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   return (
     <div>
       <div className="header-bokhylle">
-      <h1>Bokhylle</h1>
-
+        <h1>Bokhylle</h1>
       </div>
       <div className="search-bar-container">
-        <Searchbar setSearchResultsBooks={setSearchResultsBooks} setSearchResultsAuthors={setSearchResultsAuthors} />
+        <Searchbar
+          setSearchResultsBooks={setSearchResultsBooks}
+          setSearchResultsAuthors={setSearchResultsAuthors}
+        />
       </div>
       <ul className="listContainer">
         <div className="scroll-container">
@@ -70,21 +72,24 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
             )
             .sort((a, b) => a.book_name.localeCompare(b.book_name))
             .map((book) => (
-              <li key={book.book_id} className="listItem">
-                <div className="firstLine">Tittel: {book.book_name}</div>
-                <div className="secondLine">
-                  Forfatter: {getAuthorNameById(book.author_id)}{" "}
+              <div key={book.book_id} className="listItem">
+                <div className="img-container">no img</div> {/* Legg til denne linjen */}
+                <div className="content">
+                  <div className="firstLine">Tittel: {book.book_name}</div>
+                  <div className="secondLine">
+                    Forfatter: {getAuthorNameById(book.author_id)}{" "}
+                  </div>
+                  <div className="thirdLine">
+                    {book.is_read ? "Lest✔" : "Ikke lest"}
+                    <button
+                      className="seeMorebtn"
+                      onClick={() => showMoreInfo(book, book.book_summary)}
+                    >
+                      Se mer
+                    </button>
+                  </div>
                 </div>
-                <div className="thirdLine">
-                  {book.is_read ? "Lest✔" : "Ikke lest"}
-                  <button
-                    className="seeMorebtn"
-                    onClick={() => showMoreInfo(book, book.book_summary)}
-                  >
-                    Se mer
-                  </button>
-                </div>
-              </li>
+              </div>
             ))}
         </div>
       </ul>

@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import StartPage from "./pages/StartPage";
 import Library from "./pages/Library";
 import Everything from "./pages/Everything";
@@ -7,7 +8,7 @@ import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div>
+    <div className="full-page">
       <Navbar />
       <div className="selectedPageInfo">
       <Routes>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/addAndDelete" element={<AddAndDelete />}/>
       </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

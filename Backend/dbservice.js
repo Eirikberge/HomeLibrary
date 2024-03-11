@@ -152,6 +152,18 @@ function checkLogin(username, password) {
     });
   });
 };
+function getUsername(username) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT user_name From dbo.Users WHERE user_name='${username}'`;
+    sql.query(connectionString, query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
 
 module.exports = {
   getAuthors: getAuthors,
@@ -164,4 +176,5 @@ module.exports = {
   deleteAuthor: deleteAuthor,
   addUser: addUser,
   checkLogin: checkLogin,
+  getUsername: getUsername,
 };

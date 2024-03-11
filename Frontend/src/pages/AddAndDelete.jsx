@@ -107,9 +107,7 @@ function AddAndDelete() {
   };
   const deleteAuthor = async () => {
     try {
-      await api.delete(
-        `/deleteauthor/${selectedAuthor}/`
-      );
+      await api.delete(`/deleteauthor/${selectedAuthor}/`);
     } catch (error) {
       console.error("Error deleting author", error);
     }
@@ -160,12 +158,18 @@ function AddAndDelete() {
   return (
     <div>
       <h1>Legg til bok eller forfatter</h1>
-      <button onClick={() => updateBox("addBook")}>Legg til bok</button>{" "}
-      <button onClick={() => updateBox("addAuthor")}>Legg til forfatter</button>{" "}
-      <button onClick={() => updateBox("deleteBook")}>Slett bok</button>{" "}
-      <button onClick={() => updateBox("deleteAuthor")}>Slett forfatter</button>
+      <section>
+        <button onClick={() => updateBox("addBook")}>Legg til bok</button>{" "}
+        <button onClick={() => updateBox("addAuthor")}>
+          Legg til forfatter
+        </button>{" "}
+        <button onClick={() => updateBox("deleteBook")}>Slett bok</button>{" "}
+        <button onClick={() => updateBox("deleteAuthor")}>
+          Slett forfatter
+        </button>
+      </section>
       {showBox === "addBook" && (
-        <div className="addingBox">
+        <section className="addingBox">
           <h1>Legg til bok:</h1>
           <label htmlFor="bookTitleInput">Boktittel: </label>
           <input
@@ -221,7 +225,7 @@ function AddAndDelete() {
             <button onClick={() => clearWindows()}>Tilbake</button>
             <button onClick={() => addBook()}>Lagre</button>
           </div>
-        </div>
+        </section>
       )}
       {showBox === "addAuthor" && (
         <div className="addingBox">
@@ -234,12 +238,8 @@ function AddAndDelete() {
             onChange={handleInputAuthor}
           />
           <div className="addanddeleteBtns">
-            <button onClick={() => clearWindows()}>
-              Tilbake
-            </button>
-            <button onClick={() => addAuthor()}>
-              Lagre
-            </button>
+            <button onClick={() => clearWindows()}>Tilbake</button>
+            <button onClick={() => addAuthor()}>Lagre</button>
           </div>
         </div>
       )}

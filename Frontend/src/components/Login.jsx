@@ -16,6 +16,7 @@ const Login = () => {
   };
 
   const getLogin = async () => {
+    e.preventDefault()
     try {
       console.log("Sjekker pålogging");
       const hashedPassword = await hashPassword(passwordLogin);
@@ -50,7 +51,7 @@ const Login = () => {
 
       {/* Bytte til Form fra Div, så kan jeg bruke enter */}
       <div> 
-        
+
         <input
           type="text"
           id="loginInputLogin"
