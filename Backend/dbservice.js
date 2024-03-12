@@ -18,7 +18,7 @@ function getAuthors() {
 function getBooks(authorId = "") {
   return new Promise((resolve, reject) => {
     let query =
-      "SELECT book_id, book_name, author_id, book_summary, is_read FROM dbo.Books";
+      "SELECT book_id, book_name, author_id, book_summary, is_read, book_image FROM dbo.Books";
     if (authorId) query += ` WHERE author_id=${authorId}`;
     sql.query(connectionString, query, (err, rows) => {
       if (err) {

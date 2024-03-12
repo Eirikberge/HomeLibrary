@@ -11,11 +11,11 @@ const Login = () => {
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-
+    
     return hashHex;
   };
 
-  const getLogin = async () => {
+  const getLogin = async (e) => {
     e.preventDefault()
     try {
       console.log("Sjekker pålogging");

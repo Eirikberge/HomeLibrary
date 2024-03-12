@@ -21,14 +21,13 @@ const BooksListTEST = ({
   };
 
   const buttonAction = (action) => {
-    if( action === "save"){
+    if (action === "save") {
       addSummaryToDatabase(selectedBookId, inputText);
-    } else if (action === "cancel"){
+    } else if (action === "cancel") {
       setSelectedBookId(null);
     }
     setSelectedBookId(null);
-
-  }
+  };
 
   return (
     <div>

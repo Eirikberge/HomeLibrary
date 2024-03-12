@@ -7,7 +7,7 @@ const Register = () => {
   const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
   const [passwordRegErrMsg, setPasswordRegErrMsg] = useState("");
   const [passwordRegErrMsg2, setPasswordRegErrMsg2] = useState("");
-  const [validName, setValidName] = useState("");
+  const [validUsername, setValidUsername] = useState("");
   const [usernameAvailability, setUsernameAvailability] = useState(true);
   const [validPassword, setValidPassword] = useState("");
   const [usernameRegErrMsg, setUsernameRegErrMsg] = useState("");
@@ -22,7 +22,7 @@ const Register = () => {
     checkValidPassword();
   }, [passwordReg]);
 
-  //#region hashPassword
+
   const USER_REGEX = /^[A-z]{4,23}$/;
   // const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
@@ -40,12 +40,12 @@ const Register = () => {
 
     return hashHex;
   };
-  //#endregion
 
-  const addUser = async () => {
+
+  const addUser = async (e) => {
     e.preventDefault()
     resetErrMsgs();
-    if (validName && validPassword && passwordReg === confirmPasswordReg) {
+    if (validUsername && validPassword && passwordReg === confirmPasswordReg) {
       try {
         console.log("adding user");
         const hashedPassword = await hashPassword(passwordReg);
@@ -57,7 +57,7 @@ const Register = () => {
         console.error("Error adding user:", error);
       }
     } else {
-      if (!validName) {
+      if (!validUsername) {
         setUsernameRegErrMsg("Ugyldig brukernavn");
       }
       if (!validPassword) {
@@ -86,7 +86,7 @@ const Register = () => {
   };
 
   const checkValidUsername = () => {
-    setValidName(USER_REGEX.test(usernameReg));
+    setValidUsername(USER_REGEX.test(usernameReg));
   };
   const checkValidPassword = () => {
     setValidPassword(PWD_REGEX.test(passwordReg));

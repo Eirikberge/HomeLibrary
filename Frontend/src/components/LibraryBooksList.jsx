@@ -19,6 +19,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
     setShowInfoWindow(true);
     setIsBoxChecked(book.is_read);
     setSaveBtn(false);
+    console.log(book.book_img);
   };
   const hideMoreInfo = () => {
     setShowInfoWindow(false);
@@ -73,7 +74,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
             .sort((a, b) => a.book_name.localeCompare(b.book_name))
             .map((book) => (
               <div key={book.book_id} className="listItem">
-                <div className="img-container">no img</div> {/* Legg til denne linjen */}
+                <div className="img-container">no img</div>
                 <div className="content">
                   <div className="firstLine">Tittel: {book.book_name}</div>
                   <div className="secondLine">
