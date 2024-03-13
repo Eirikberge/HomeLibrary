@@ -59,12 +59,14 @@ const Searchbar = ({ setSearchResultsAuthors, setSearchResultsBooks }) => {
     <div className="input-wrapper">
       <FaSearch id="search-icon" />
       <input
+        className="input"
         placeholder="Søk etter bok..."
         value={searchbarInputBook}
         onChange={(e) => handleChangeBook(e.target.value)}
       />
       <FaSearch id="search-icon" />
       <input
+        className="input"
         placeholder="Søk etter forfatter..."
         value={searchbarInputAuthor}
         onChange={(e) => handleChangeAuthor(e.target.value)}

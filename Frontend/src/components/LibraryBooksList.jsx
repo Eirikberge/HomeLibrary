@@ -13,6 +13,8 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const [searchResultsBooks, setSearchResultsBooks] = useState([]);
   const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
 
+  const [selectedIsRead, setSelectedIsRead] = useState("All");
+
   const showMoreInfo = (book, bookSummary) => {
     setSelectetBook(book);
     setNewSummaryText(bookSummary);
@@ -36,6 +38,10 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
     setIsBoxChecked(!isBoxChecked);
     setSaveBtn(true);
   };
+  const handleIsReadBooks = (e) => {
+    setSelectedIsRead(e.target.value);
+    console.log(selectedIsRead);
+  }
   const saveNewInfo = (bookId, bookSummary) => {
     if (selectedBook.is_read !== isBoxChecked)
       changeIsRead(bookId, selectedBook.is_read);
@@ -56,13 +62,29 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
           setSearchResultsBooks={setSearchResultsBooks}
           setSearchResultsAuthors={setSearchResultsAuthors}
         />
+      <div className="drop-down-container">
+        <select
+          id="isReadChoice"
+          value={selectedIsRead}
+          onChange={handleIsReadBooks}
+          >
+          <option value={"All"}>Alle</option>
+          <option value={"justRead"}>Kun lest</option>
+          <option value={"justNotRead"}>Kun ikke lest</option>
+          </select>
       </div>
+      </div>
+
+
       <ul className="listContainer">
         <div className="scroll-container">
           {books
             .filter(
               (book) =>
-                (searchResultsBooks.length === 0 ||
+              (searchResultsBooks.length === 0 &&
+                ((selectedIsRead === "All") ||
+                 (selectedIsRead === "justRead" && book.is_read) ||
+                 (selectedIsRead === "justNotRead" && !book.is_read)) ||
                   searchResultsBooks.some(
                     (result) => result.book_name === book.book_name
                   )) &&
@@ -139,14 +161,21 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
               />
             </div>
           )}
-          <button onClick={() => hideMoreInfo()}>Tilbake</button>
-          {saveBtn && (
-            <button
-              onClick={() => saveNewInfo(selectedBook.book_id, newSummaryText)}
-            >
-              Lagre
-            </button> // sette på en disabled istede?
-          )}
+          <div className="bottomLeftButtonContainer">
+            <button className="bottomLeftButton" onClick={() => hideMoreInfo()}>
+              Tilbake
+            </button>{" "}
+            {saveBtn && (
+              <button
+                className="bottomLeftButton"
+                onClick={() =>
+                  saveNewInfo(selectedBook.book_id, newSummaryText)
+                }
+              >
+                Lagre
+              </button> // sette på en disabled istede?
+            )}
+          </div>
         </div>
       )}
     </div>

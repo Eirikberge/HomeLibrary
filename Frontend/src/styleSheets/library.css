@@ -87,6 +87,7 @@
   padding: 20px;
   border: solid;
 }
+
 .topRightButtonContainer {
   position: absolute;
   top: 15px;
@@ -94,6 +95,16 @@
 }
 
 .topRightButton {
+  font-size: 12px;
+}
+
+.bottomLeftButtonContainer {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+
+.bottomLeftButton {
   font-size: 12px;
 }
 
