@@ -8,7 +8,7 @@
 }
 .listContainer {
   display: grid;
-  width: 500px;
+  width: 525px;
   margin-left: 5x;
 }
 .listItem {
@@ -58,7 +58,7 @@
 
 /* Scroller */
 .scroll-container {
-  max-height: 600px;
+  max-height: 700px;
   overflow-y: auto;
   border: 1px solid #ccc;
 }

@@ -15,6 +15,8 @@ function AddAndDelete() {
   const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
   const [searchbarInput, setSearchbarInput] = useState([]);
 
+  const [actionText, setActionText] = useState("");
+
   useEffect(() => {
     if (showBox) {
       fetchBooks();
@@ -80,6 +82,7 @@ function AddAndDelete() {
       await api.post(`/addbooktodb/${selectedAuthor}/`, {
         bookName: bookNameInput,
       });
+      setActionText(`Boken ${bookNameInput} lagt til`)
     } catch (error) {
       console.error("Error adding book:", error);
     }
@@ -91,6 +94,8 @@ function AddAndDelete() {
       await api.post(`/addauthor/`, {
         authorName: authorNameInput,
       });
+      setActionText(`Forfatter ${authorNameInput} lagt til`)
+
     } catch (error) {
       console.log("Error adding author:", error);
     }
@@ -100,6 +105,8 @@ function AddAndDelete() {
   const deleteBook = async () => {
     try {
       await api.delete(`/deletebook/${selectedBook}/`);
+      setActionText(`Boken ${selectedBook.book_name} lagt til`)
+
     } catch (error) {
       console.error("Error deleting book", error);
     }
@@ -155,6 +162,15 @@ function AddAndDelete() {
     setAuthorNameInput("");
   };
 
+  useEffect(() => {
+    if (actionText) {
+      const timerId = setTimeout(() => {
+        setActionText("");
+      }, 3000);
+      return () => clearTimeout(timerId);
+    }
+  }, [actionText]);
+
   return (
     <div>
       <h1>Legg til bok eller forfatter</h1>
@@ -168,6 +184,7 @@ function AddAndDelete() {
           Slett forfatter
         </button>
       </section>
+      {actionText}
       {showBox === "addBook" && (
         <section className="addingBox">
           <h1>Legg til bok:</h1>

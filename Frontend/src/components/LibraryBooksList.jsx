@@ -41,7 +41,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
   const handleIsReadBooks = (e) => {
     setSelectedIsRead(e.target.value);
     console.log(selectedIsRead);
-  }
+  };
   const saveNewInfo = (bookId, bookSummary) => {
     if (selectedBook.is_read !== isBoxChecked)
       changeIsRead(bookId, selectedBook.is_read);
@@ -62,29 +62,31 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
           setSearchResultsBooks={setSearchResultsBooks}
           setSearchResultsAuthors={setSearchResultsAuthors}
         />
-      <div className="drop-down-container">
-        <select
-          id="isReadChoice"
-          value={selectedIsRead}
-          onChange={handleIsReadBooks}
-          >
-          <option value={"All"}>Alle</option>
-          <option value={"justRead"}>Kun lest</option>
-          <option value={"justNotRead"}>Kun ikke lest</option>
-          </select>
-      </div>
-      </div>
 
+      
+
+        {/* <div className="drop-down-container">
+          <select
+            id="isReadChoice"
+            value={selectedIsRead}
+            onChange={handleIsReadBooks}
+          >
+            <option value={"All"}>Alle</option>
+            <option value={"justRead"}>Kun lest</option>
+            <option value={"justNotRead"}>Kun ikke lest</option>
+          </select>
+        </div> */}
+      </div>
 
       <ul className="listContainer">
         <div className="scroll-container">
           {books
             .filter(
               (book) =>
-              (searchResultsBooks.length === 0 &&
-                ((selectedIsRead === "All") ||
-                 (selectedIsRead === "justRead" && book.is_read) ||
-                 (selectedIsRead === "justNotRead" && !book.is_read)) ||
+                ((searchResultsBooks.length === 0 &&
+                  (selectedIsRead === "All" ||
+                    (selectedIsRead === "justRead" && book.is_read) ||
+                    (selectedIsRead === "justNotRead" && !book.is_read))) ||
                   searchResultsBooks.some(
                     (result) => result.book_name === book.book_name
                   )) &&
