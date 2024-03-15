@@ -167,7 +167,7 @@ function getUserByUsername(loggedInUsername) {
   });
 }
 
-function getUsername(username) {
+function checkUsername(username) {
   return new Promise((resolve, reject) => {
     const query = `SELECT user_name From dbo.Users WHERE user_name='${username}'`;
     sql.query(connectionString, query, (err, rows) => {
@@ -191,7 +191,6 @@ module.exports = {
   deleteAuthor: deleteAuthor,
   addUser: addUser,
   checkLogin: checkLogin,
-  getUsername: getUsername,
-
+  checkUsername: checkUsername,
   getUserByUsername: getUserByUsername,
 };

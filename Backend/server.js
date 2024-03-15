@@ -114,7 +114,7 @@ function authenticateToken(req, res, next) {
 app.post("/checkusername", async (req, res) => {
   const username = req.body.username;
   try {
-    const info = await db.getUsername(username);
+    const info = await db.checkUsername(username);
     if (info.length > 0) {
       res.send({ available: false });
     } else {

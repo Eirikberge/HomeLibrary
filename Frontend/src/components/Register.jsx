@@ -45,7 +45,7 @@ const Register = () => {
   const addUser = async (e) => {
     // e.preventDefault()
     resetErrMsgs();
-    if (validUsername && validPassword && passwordReg === confirmPasswordReg) {
+    if (validUsername && validPassword && usernameAvailability && passwordReg === confirmPasswordReg) {
       try {
         console.log("adding user");
         const hashedPassword = await hashPassword(passwordReg);
@@ -78,7 +78,6 @@ const Register = () => {
       const response = await api.post(`/checkusername`, {
         username: usernameReg,
       });
-
       setUsernameAvailability(response.data.available);
     } catch (error) {
       console.error("Error checking username availability:", error);
