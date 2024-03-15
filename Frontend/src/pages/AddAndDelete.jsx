@@ -4,14 +4,19 @@ import "../styleSheets/AddAndDelete.css";
 
 function AddAndDelete() {
   const [showBox, setShowBox] = useState("");
+
   const [authors, setAuthors] = useState([]);
   const [books, setBooks] = useState([]);
+
   const [bookNameInput, setBookNameInput] = useState("");
   const [authorNameInput, setAuthorNameInput] = useState("");
+
   const [selectedBook, setSelctedBook] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
+
   const [searchbarPressed, setSearchbarPressed] = useState(true);
-  const [searchResultsBook, setSearchResultsBook] = useState([]);
+
+  const [searchResultsBook, setSearchResultsBooks] = useState([]);
   const [searchResultsAuthors, setSearchResultsAuthors] = useState([]);
   const [searchbarInput, setSearchbarInput] = useState([]);
 
@@ -24,134 +29,113 @@ function AddAndDelete() {
     }
   }, [showBox]);
 
-  const fetchAuthors = async () => {
-    try {
-      const response = await api.get("/authors");
-      setAuthors(response.data);
-    } catch (error) {
-      console.error("Error fetching authors:", error);
+  useEffect(() => {
+    if (actionText) {
+      const timerId = setTimeout(() => {
+        setActionText("");
+      }, 5000);
+      return () => clearTimeout(timerId);
     }
-  };
+  }, [actionText]);
 
-  const fetchBooks = async () => {
+  const fetchBooks = async (value) => {
     try {
       const response = await api.get("/books");
-      setBooks(response.data);
+      const booksData = response.data;
+      setBooks(booksData);
+      if (value) {
+        const results = booksData.filter((book) => {
+          const { book_name, author_id } = book;
+          return (
+            book_name &&
+            author_id &&
+            book_name.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+        setSearchResultsBooks(results);
+      }
     } catch (error) {
       console.error("Error fetching books:", error);
     }
   };
 
-  const fetchBooksSB = (value) => {
-    fetch("http://localhost:2222/books")
-      .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((books) => {
+  const fetchAuthors = async (value) => {
+    try {
+      const response = await api.get("/authors");
+      const authorData = response.data;
+      setAuthors(authorData);
+      if (value) {
+        const results = authorData.filter((author) => {
+          const { author_name, author_id } = author;
           return (
-            books.book_name &&
-            books.book_id &&
-            books.book_name.toLowerCase().includes(value.toLowerCase())
-          );
-        });
-        setSearchResultsBook(results);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  const fetchAuthorsSB = (value) => {
-    fetch("http://localhost:2222/authors")
-      .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((authors) => {
-          return (
-            authors.author_name &&
-            authors.author_id &&
-            authors.author_name.toLowerCase().includes(value.toLowerCase())
+            author_name &&
+            author_id &&
+            author_name.toLowerCase().includes(value.toLowerCase())
           );
         });
         setSearchResultsAuthors(results);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  const addBook = async () => {
+  const addData = async (endpoint, inputData, successText) => {
     try {
-      await api.post(`/addbooktodb/${selectedAuthor}/`, {
-        bookName: bookNameInput,
-      });
-      setActionText(`Boken ${bookNameInput} lagt til`)
+      await api.post(endpoint, inputData);
+      setActionText(successText);
     } catch (error) {
-      console.error("Error adding book:", error);
+      console.error("Error adding data:", error);
     }
     clearWindows();
   };
 
-  const addAuthor = async () => {
+  const deleteData = async (endpoint, id, successText) => {
     try {
-      await api.post(`/addauthor/`, {
-        authorName: authorNameInput,
-      });
-      setActionText(`Forfatter ${authorNameInput} lagt til`)
-
+      await api.delete(`${endpoint}/${id}`);
+      setActionText(successText);
     } catch (error) {
-      console.log("Error adding author:", error);
+      console.error("Error deleting data:", error);
     }
     clearWindows();
   };
 
-  const deleteBook = async () => {
-    try {
-      await api.delete(`/deletebook/${selectedBook}/`);
-      setActionText(`Boken ${selectedBook.book_name} lagt til`)
+  const addBook = () => addData(`/addbooktodb/${selectedAuthor}/`, { bookName: bookNameInput }, `Boken ${bookNameInput} lagt til`);
 
-    } catch (error) {
-      console.error("Error deleting book", error);
-    }
-    clearWindows();
-  };
-  const deleteAuthor = async () => {
-    try {
-      await api.delete(`/deleteauthor/${selectedAuthor}/`);
-    } catch (error) {
-      console.error("Error deleting author", error);
-    }
-    clearWindows();
-  };
+  const addAuthor = () => addData("/addauthor/", { authorName: authorNameInput }, `Forfatter ${authorNameInput} lagt til`);
+  
+  const deleteBook = () => deleteData("/deletebook", selectedBook, `Boken ${selectedBook} er slettet`);
+  
+  const deleteAuthor = () => deleteData("/deleteauthor", selectedAuthor, `Forfatter ${selectedAuthor} er slettet`);
 
-  const updateBox = (state) => {
-    clearWindows();
-    setShowBox(state);
-  };
-  const handleAuthorChoice = (e) => {
-    setSelectedAuthor(e.target.value);
-  };
-  const handleInputBook = (e) => {
-    setBookNameInput(e.target.value);
-  };
-  const handleInputAuthor = (e) => {
-    setAuthorNameInput(e.target.value);
-  };
+  const handleAuthorChoice = (e) => setSelectedAuthor(e.target.value);
+  const handleInputBook = (e) => setBookNameInput(e.target.value);
+  const handleInputAuthor = (e) => setAuthorNameInput(e.target.value);
+
   const handleSearchbarBook = (value) => {
     setSearchbarInput(value);
-    fetchBooksSB(value);
+    fetchBooks(value);
+  };
+  const handleSearchbarAuthor = (value) => {
+    setSearchbarInput(value);
+    fetchAuthors(value);
   };
   const handlesSearchBarClickBook = (id, name) => {
     setSelctedBook(id);
     setSearchbarInput(name);
     setSearchbarPressed(false);
   };
-  const handleSearchbarAuthor = (value) => {
-    setSearchbarInput(value);
-    fetchAuthorsSB(value);
-  };
-  const handlesSearchBarClickAuthor = (id, name) => {
+  const handleSearchBarClickAuthor = (id, name) => {
     setSelectedAuthor(id);
     setSearchbarInput(name);
     setSearchbarPressed(false);
   };
+
+  const updateBox = (state) => {
+    clearWindows();
+    setShowBox(state);
+  };
+
   const clearWindows = () => {
     setShowBox("");
     setSearchbarPressed(true);
@@ -161,15 +145,6 @@ function AddAndDelete() {
     setSelectedAuthor("");
     setAuthorNameInput("");
   };
-
-  useEffect(() => {
-    if (actionText) {
-      const timerId = setTimeout(() => {
-        setActionText("");
-      }, 3000);
-      return () => clearTimeout(timerId);
-    }
-  }, [actionText]);
 
   return (
     <div>
@@ -227,7 +202,7 @@ function AddAndDelete() {
                 <div
                   key={id}
                   onClick={() =>
-                    handlesSearchBarClickAuthor(
+                    handleSearchBarClickAuthor(
                       result.author_id,
                       result.author_name
                     )
@@ -321,7 +296,7 @@ function AddAndDelete() {
                 <div
                   key={id}
                   onClick={() =>
-                    handlesSearchBarClickAuthor(
+                    handleSearchBarClickAuthor(
                       result.author_id,
                       result.author_name
                     )

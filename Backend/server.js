@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const db = require("./dbservice");
+
+const jwt = require("jsonwebtoken");
 
 app.use(cors());
 app.use(express.json());
@@ -58,16 +61,12 @@ app.post("/adduser", async (req, res) => {
   const info = await db.addUser(username, password);
   res.send(info);
 });
-// app.post("/login", async(req, res) => {
-//     const username = req.body.username;
-//     const password = req.body.password;
-//     const info = await db.checkLogin(username, password)
-//     res.send(info);
-// })
 
-app.post("/login", async (req, res) => {
+app.post("/users/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const user = { name: username };
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
   try {
     const info = await db.checkLogin(username, password);
     if (info.length > 0) {
@@ -75,6 +74,7 @@ app.post("/login", async (req, res) => {
         success: true,
         message: "Pålogging vellykket",
         user: info[0],
+        accessToken: accessToken,
       });
     } else {
       res.send({ success: false, message: "Feil brukernavn eller passord" });
@@ -83,6 +83,33 @@ app.post("/login", async (req, res) => {
     res.send({ success: false, message: "Intern serverfeil" });
   }
 });
+
+app.get("/users", authenticateToken, async (req, res) => {
+  try {
+    const loggedInUsername = req.user.name;
+    const user = await db.getUserByUsername(loggedInUsername);
+    if (user && user.length === 1) {
+      res.send(user[0]);
+    } else {
+      res.status(404).send("Bruker ikke funnet, eller mer en enn bruker");
+    }
+  } catch (error) {
+    console.log("Feil ved henting av brukerinformasjon:", error.message);
+    res.status(500).send("Intern serverfeil");
+  }
+});
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401); // 401 = unauthorized, no access
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
 
 app.post("/checkusername", async (req, res) => {
   const username = req.body.username;
@@ -94,7 +121,7 @@ app.post("/checkusername", async (req, res) => {
       res.send({ available: true });
     }
   } catch (error) {
-    res.send({});
+    res.send({ error });
   }
 });
 

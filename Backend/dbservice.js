@@ -139,7 +139,8 @@ function addUser(username, password) {
       });
     });
   });
-};
+}
+
 function checkLogin(username, password) {
   return new Promise((resolve, reject) => {
     const query = `SELECT * From dbo.Users WHERE user_name='${username}' AND user_password='${password}'`;
@@ -151,7 +152,21 @@ function checkLogin(username, password) {
       }
     });
   });
-};
+}
+
+function getUserByUsername(loggedInUsername) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * From dbo.Users WHERE user_name='${loggedInUsername}'`;
+    sql.query(connectionString, query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 function getUsername(username) {
   return new Promise((resolve, reject) => {
     const query = `SELECT user_name From dbo.Users WHERE user_name='${username}'`;
@@ -163,7 +178,7 @@ function getUsername(username) {
       }
     });
   });
-};
+}
 
 module.exports = {
   getAuthors: getAuthors,
@@ -177,4 +192,6 @@ module.exports = {
   addUser: addUser,
   checkLogin: checkLogin,
   getUsername: getUsername,
+
+  getUserByUsername: getUserByUsername,
 };

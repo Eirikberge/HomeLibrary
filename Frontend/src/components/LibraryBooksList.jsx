@@ -21,7 +21,6 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
     setShowInfoWindow(true);
     setIsBoxChecked(book.is_read);
     setSaveBtn(false);
-    console.log(book.book_img);
   };
   const hideMoreInfo = () => {
     setShowInfoWindow(false);
@@ -34,13 +33,11 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
     setShowTextboxSummary(true);
   };
   const handleCheckboxChange = () => {
-    // funker bare en gang, må endres!
     setIsBoxChecked(!isBoxChecked);
     setSaveBtn(true);
   };
   const handleIsReadBooks = (e) => {
     setSelectedIsRead(e.target.value);
-    console.log(selectedIsRead);
   };
   const saveNewInfo = (bookId, bookSummary) => {
     if (selectedBook.is_read !== isBoxChecked)
@@ -63,9 +60,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
           setSearchResultsAuthors={setSearchResultsAuthors}
         />
 
-      
-
-        {/* <div className="drop-down-container">
+        <div className="drop-down-container">
           <select
             id="isReadChoice"
             value={selectedIsRead}
@@ -75,7 +70,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
             <option value={"justRead"}>Kun lest</option>
             <option value={"justNotRead"}>Kun ikke lest</option>
           </select>
-        </div> */}
+        </div>
       </div>
 
       <ul className="listContainer">
@@ -175,7 +170,7 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
                 }
               >
                 Lagre
-              </button> // sette på en disabled istede?
+              </button>
             )}
           </div>
         </div>

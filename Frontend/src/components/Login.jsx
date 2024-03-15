@@ -15,27 +15,43 @@ const Login = () => {
     return hashHex;
   };
 
-  const getLogin = async (e) => {
-    e.preventDefault()
+    const getLogin = async (e) => {
     try {
-      console.log("Sjekker pålogging");
+      console.log("Sjekker pålogging fra frontend");
       const hashedPassword = await hashPassword(passwordLogin);
-
-      const response = await api.post(`/login`, {
+  
+      const response = await api.post(`/users/login`, {
         username: usernameLogin,
         password: hashedPassword,
       });
-
+  
       if (response.data.success) {
-        console.log("Pålogging vellykket!");
+        console.log(response.data.message);
+  
+        const accessToken = response.data.accessToken;
+        localStorage.setItem('accessToken', accessToken); // Lagre token i Local Storage eller tilsvarende
+  
+        fetchUsers();
       } else {
         console.log("Feil ved pålogging:", response.data.message);
       }
     } catch (error) {
       console.log("Feil ved pålogging:", error.message);
-    } finally {
-      setUsernameLogin("");
-      setPasswordLogin("");
+    } 
+  };
+  
+  const fetchUsers = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await api.get("/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+  
+      console.log("Brukerinformasjon:", response.data);
+    } catch (error) {
+      console.log("Feil ved henting av brukerinformasjon:", error.message);
     }
   };
 

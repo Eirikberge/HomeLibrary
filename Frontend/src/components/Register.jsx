@@ -23,7 +23,7 @@ const Register = () => {
   }, [passwordReg]);
 
 
-  const USER_REGEX = /^[A-z]{4,23}$/;
+  const USER_REGEX = /^[A-z]{4,24}$/;
   // const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
   const PWD_REGEX = /^[A-z]{4,24}$/;
@@ -43,7 +43,7 @@ const Register = () => {
 
 
   const addUser = async (e) => {
-    e.preventDefault()
+    // e.preventDefault()
     resetErrMsgs();
     if (validUsername && validPassword && passwordReg === confirmPasswordReg) {
       try {
