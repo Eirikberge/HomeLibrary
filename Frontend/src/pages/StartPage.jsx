@@ -1,14 +1,7 @@
-import Register from "../components/Register"
-import Login from "../components/Login"
+
 
 const StartPage = () => {
-    return (
-        <div>
-            <Register />
-            <Login />
+  return <h1>Velkommen</h1>;
+};
 
-        </div>
-    )
-}
-
-export default StartPage
+export default StartPage;

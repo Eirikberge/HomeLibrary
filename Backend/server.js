@@ -71,9 +71,9 @@ app.post("/users/login", async (req, res) => {
     const info = await db.checkLogin(username, password);
     if (info.length > 0) {
       res.send({
+        user: info[0],
         success: true,
         message: "Pålogging vellykket",
-        user: info[0],
         accessToken: accessToken,
       });
     } else {

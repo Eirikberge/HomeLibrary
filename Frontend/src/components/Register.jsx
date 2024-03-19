@@ -43,7 +43,7 @@ const Register = () => {
 
 
   const addUser = async (e) => {
-    // e.preventDefault()
+    e.preventDefault()
     resetErrMsgs();
     if (validUsername && validPassword && usernameAvailability && passwordReg === confirmPasswordReg) {
       try {
@@ -106,10 +106,9 @@ const Register = () => {
   };
 
   return (
-    // Bruke form senere
     <div className="Register">
       <h1>Registrer</h1>
-
+    <form onSubmit={addUser}>
       <label htmlFor="registerInputReg">Brukernavn:</label>
       <div>
         <input
@@ -153,7 +152,8 @@ const Register = () => {
         {usernameRegErrMsg2 !== "" && <span>{usernameRegErrMsg2}</span>}
       </div>
       <br />
-      <button onClick={() => addUser()}>Registrer</button>
+      <button type="submit">Registrer</button>
+      </form>
     </div>
   );
 };
