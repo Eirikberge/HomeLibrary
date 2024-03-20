@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAuth from "./Auth/useAuth";
 import api from "./Api";
 import { useLocation, useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -40,8 +41,10 @@ const Login = () => {
         console.log(response.data.message);
 
         const accessToken = response.data.accessToken;
-        localStorage.setItem("accessToken", accessToken); // Lagre token i Local Storage eller tilsvarende
-
+        const refreshToken = response.data.refreshToken;
+        localStorage.setItem("accessToken", accessToken); // Lagre token i Local Storage
+        console.log(accessToken)
+        console.log(refreshToken)
         fetchUsers();
         setAuth({ user: response.data.user, isAuthenticated: true });
         // navigate(from, {replace: true}); Hvis jeg ønsker å sende til forrige siden, eller den han ønsket å gå til

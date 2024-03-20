@@ -55,6 +55,19 @@ app.delete("/deleteauthor/:authorId", async (req, res) => {
   const info = await db.deleteAuthor(authorId);
   res.send(info);
 });
+app.post("/checkusername", async (req, res) => {
+  const username = req.body.username;
+  try {
+    const info = await db.checkUsername(username);
+    if (info.length > 0) {
+      res.send({ available: false });
+    } else {
+      res.send({ available: true });
+    }
+  } catch (error) {
+    res.send({ error });
+  }
+});
 app.post("/adduser", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -66,7 +79,8 @@ app.post("/users/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const user = { name: username };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
   try {
     const info = await db.checkLogin(username, password);
     if (info.length > 0) {
@@ -75,6 +89,7 @@ app.post("/users/login", async (req, res) => {
         success: true,
         message: "Pålogging vellykket",
         accessToken: accessToken,
+        refreshToken: refreshToken,
       });
     } else {
       res.send({ success: false, message: "Feil brukernavn eller passord" });
@@ -111,19 +126,10 @@ function authenticateToken(req, res, next) {
   });
 }
 
-app.post("/checkusername", async (req, res) => {
-  const username = req.body.username;
-  try {
-    const info = await db.checkUsername(username);
-    if (info.length > 0) {
-      res.send({ available: false });
-    } else {
-      res.send({ available: true });
-    }
-  } catch (error) {
-    res.send({ error });
-  }
-});
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1m'})
+}
+
 
 app.listen(2222, () => {
   console.log("listening");

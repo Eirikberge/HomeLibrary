@@ -4,6 +4,7 @@ const MyPage = () => {
     const { setAuth } = useAuth();
 
     const logout = () => {
+        localStorage.removeItem('accessToken');
         setAuth({ isAuthenticated: false });
 
     }

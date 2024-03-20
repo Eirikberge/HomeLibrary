@@ -13,9 +13,22 @@ const Register = () => {
   const [usernameRegErrMsg, setUsernameRegErrMsg] = useState("");
   const [usernameRegErrMsg2, setUsernameRegErrMsg2] = useState("");
 
+  const [actionText, setActionText] = useState("");
+
+
+  useEffect(() => {
+    if (actionText) {
+      const timerId = setTimeout(() => {
+        setActionText("");
+      }, 5000);
+      return () => clearTimeout(timerId);
+    }
+  }, [actionText]);
+
   useEffect(() => {
     checkValidUsername();
     checkUsernameAvailability();
+    resetErrMsgs();
   }, [usernameReg]);
 
   useEffect(() => {
@@ -53,6 +66,7 @@ const Register = () => {
           username: usernameReg,
           password: hashedPassword,
         });
+        setActionText(`${usernameReg} er lagt til`)
       } catch (error) {
         console.error("Error adding user:", error);
       }
@@ -151,6 +165,7 @@ const Register = () => {
         {usernameRegErrMsg !== "" && <span>{usernameRegErrMsg}</span>}
         {usernameRegErrMsg2 !== "" && <span>{usernameRegErrMsg2}</span>}
       </div>
+      {actionText}
       <br />
       <button type="submit">Registrer</button>
       </form>
