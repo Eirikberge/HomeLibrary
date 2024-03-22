@@ -67,8 +67,8 @@ const BooksList = ({ books, getAuthorNameById, changeIsRead, addSummary }) => {
             onChange={handleIsReadBooks}
           >
             <option value={"All"}>Alle</option>
-            <option value={"justRead"}>Kun lest</option>
-            <option value={"justNotRead"}>Kun ikke lest</option>
+            <option value={"justRead"}>Lest</option>
+            <option value={"justNotRead"}>Ikke lest</option>
           </select>
         </div>
       </div>

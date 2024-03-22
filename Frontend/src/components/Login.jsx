@@ -4,7 +4,7 @@ import api from "./Api";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-const Login = () => {
+const Login = ({showBox}) => {
   const { setAuth } = useAuth();
 
   const navigate = useNavigate();
@@ -72,6 +72,8 @@ const Login = () => {
     }
   };
 
+
+
   return (
     <div className="Login">
       <h1>Logg inn</h1>
@@ -100,6 +102,10 @@ const Login = () => {
         <br />
         <button type="submit">Logg inn</button>
       </form>
+      <br />
+      <div>
+      Har du ikke bruker? <a href="#" onClick={showBox}>Registrer</a>
+      </div>
     </div>
   );
 };

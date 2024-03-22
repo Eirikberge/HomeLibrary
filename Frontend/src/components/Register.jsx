@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "./Api";
 
-const Register = () => {
+const Register = ({ showBox }) => {
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [confirmPasswordReg, setConfirmPasswordReg] = useState("");
@@ -14,7 +14,6 @@ const Register = () => {
   const [usernameRegErrMsg2, setUsernameRegErrMsg2] = useState("");
 
   const [actionText, setActionText] = useState("");
-
 
   useEffect(() => {
     if (actionText) {
@@ -35,7 +34,6 @@ const Register = () => {
     checkValidPassword();
   }, [passwordReg]);
 
-
   const USER_REGEX = /^[A-z]{4,24}$/;
   // const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
@@ -54,11 +52,15 @@ const Register = () => {
     return hashHex;
   };
 
-
   const addUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     resetErrMsgs();
-    if (validUsername && validPassword && usernameAvailability && passwordReg === confirmPasswordReg) {
+    if (
+      validUsername &&
+      validPassword &&
+      usernameAvailability &&
+      passwordReg === confirmPasswordReg
+    ) {
       try {
         console.log("adding user");
         const hashedPassword = await hashPassword(passwordReg);
@@ -66,7 +68,7 @@ const Register = () => {
           username: usernameReg,
           password: hashedPassword,
         });
-        setActionText(`${usernameReg} er lagt til`)
+        setActionText(`${usernameReg} er lagt til`);
       } catch (error) {
         console.error("Error adding user:", error);
       }
@@ -122,53 +124,60 @@ const Register = () => {
   return (
     <div className="Register">
       <h1>Registrer</h1>
-    <form onSubmit={addUser}>
-      <label htmlFor="registerInputReg">Brukernavn:</label>
-      <div>
-        <input
-          type="text"
-          id="registerInputReg"
-          autoComplete="off"
-          value={usernameReg}
-          onChange={(e) => {
-            setUsernameReg(e.target.value);
-          }}
-        />
+      <form onSubmit={addUser}>
+        <label htmlFor="registerInputReg">Brukernavn:</label>
+        <div>
+          <input
+            type="text"
+            id="registerInputReg"
+            autoComplete="off"
+            value={usernameReg}
+            onChange={(e) => {
+              setUsernameReg(e.target.value);
+            }}
+          />
+          <br />
+          <label htmlFor="passwordInputReg">Password:</label>
+          <br />
+          <input
+            type="password"
+            id="passwordInputReg"
+            value={passwordReg}
+            onChange={(e) => {
+              setPasswordReg(e.target.value);
+            }}
+          />
+          <br />
+          <label htmlFor="passwordInputRegRepeat">Gjenta passord</label>
+          <br />
+          <input
+            type="password"
+            id="passwordInputRegRepeat"
+            value={confirmPasswordReg}
+            onChange={(e) => {
+              setConfirmPasswordReg(e.target.value);
+            }}
+          />
+        </div>
+        <div className="ErrorMsg">
+          {passwordRegErrMsg !== "" && <span>{passwordRegErrMsg}</span>}
+          {passwordRegErrMsg2 !== "" && <span>{passwordRegErrMsg2}</span>}
+        </div>
+        <div className="ErrorMsg">
+          {usernameRegErrMsg !== "" && <span>{usernameRegErrMsg}</span>}
+          {usernameRegErrMsg2 !== "" && <span>{usernameRegErrMsg2}</span>}
+        </div>
+        {actionText}
         <br />
-        <label htmlFor="passwordInputReg">Password:</label>
-        <br />
-        <input
-          type="password"
-          id="passwordInputReg"
-          value={passwordReg}
-          onChange={(e) => {
-            setPasswordReg(e.target.value);
-          }}
-        />
-        <br />
-        <label htmlFor="passwordInputRegRepeat">Gjenta passord</label>
-        <br />
-        <input
-          type="password"
-          id="passwordInputRegRepeat"
-          value={confirmPasswordReg}
-          onChange={(e) => {
-            setConfirmPasswordReg(e.target.value);
-          }}
-        />
-      </div>
-      <div className="ErrorMsg">
-        {passwordRegErrMsg !== "" && <span>{passwordRegErrMsg}</span>}
-        {passwordRegErrMsg2 !== "" && <span>{passwordRegErrMsg2}</span>}
-      </div>
-      <div className="ErrorMsg">
-        {usernameRegErrMsg !== "" && <span>{usernameRegErrMsg}</span>}
-        {usernameRegErrMsg2 !== "" && <span>{usernameRegErrMsg2}</span>}
-      </div>
-      {actionText}
-      <br />
-      <button type="submit">Registrer</button>
+        <button type="submit">Registrer</button>
       </form>
+      <br />
+      <div>
+        Allerede bruker?{" "}
+        <a href="#" onClick={showBox}>
+          Logg inn
+        </a>
+      </div>
     </div>
   );
 };
